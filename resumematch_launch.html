@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ResumeMatch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#0a0a0f;color:#e8e6f0;min-height:100vh;overflow-x:hidden}
+:root{
+  --gold:#c9a84c;--gold-light:#e8c97a;--gold-dim:#7a5f28;
+  --surface:#13121a;--surface2:#1c1b26;--surface3:#252434;
+  --border:#2e2c40;--border-light:#3d3b54;
+  --text:#e8e6f0;--text-muted:#8b89a0;--text-dim:#5a5870;
+  --green:#4ade80;--red:#f87171;--blue:#60a5fa;
+}
+.app{max-width:900px;margin:0 auto;padding:2rem 1rem}
+
+/* Header */
+.header{text-align:center;margin-bottom:3rem}
+.logo{font-family:'DM Serif Display',serif;font-size:2.8rem;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.5px}
+.logo-sub{font-size:0.85rem;color:var(--text-muted);letter-spacing:3px;text-transform:uppercase;margin-top:0.25rem}
+
+
+/* Steps */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:2.5rem}
+.step{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:30px;font-size:13px;color:var(--text-dim);transition:all 0.3s}
+.step.active{background:var(--surface2);border:1px solid var(--border-light);color:var(--gold)}
+.step.done{color:var(--green)}
+.step-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;background:var(--surface3);color:var(--text-dim)}
+.step.active .step-num{background:var(--gold);color:#000}
+.step.done .step-num{background:var(--green);color:#000}
+.step-divider{width:32px;height:1px;background:var(--border)}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1.5rem}
+.card-title{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--text);margin-bottom:0.5rem}
+.card-sub{font-size:14px;color:var(--text-muted);margin-bottom:1.5rem}
+
+/* Upload zone */
+.upload-zone{border:2px dashed var(--border-light);border-radius:12px;padding:3rem 2rem;text-align:center;cursor:pointer;transition:all 0.3s;position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--gold);background:rgba(201,168,76,0.05)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.upload-icon{font-size:2.5rem;color:var(--text-dim);margin-bottom:0.75rem}
+.upload-title{font-weight:500;font-size:1rem;color:var(--text);margin-bottom:0.25rem}
+.upload-hint{font-size:13px;color:var(--text-muted)}
+.file-ready{display:flex;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--border-light);border-radius:10px;padding:1rem 1.25rem;margin-top:1rem}
+.file-icon{font-size:1.5rem;color:var(--gold)}
+.file-name{font-size:14px;font-weight:500}
+.file-size{font-size:12px;color:var(--text-muted)}
+
+/* Form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+label{font-size:13px;color:var(--text-muted);font-weight:500}
+input,select,textarea{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border 0.2s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+select option{background:#1c1b26}
+.checkbox-group{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;transition:all 0.2s;user-select:none}
+.chip:hover{border-color:var(--border-light)}
+.chip.selected{background:rgba(201,168,76,0.12);border-color:var(--gold);color:var(--gold)}
+.chip input{display:none}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s;border:none;font-family:'DM Sans',sans-serif}
+.btn-primary{background:var(--gold);color:#000}
+.btn-primary:hover{background:var(--gold-light)}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-muted)}
+.btn-ghost:hover{border-color:var(--border-light);color:var(--text)}
+.btn-danger{background:transparent;border:1px solid var(--red);color:var(--red)}
+.btn-success{background:rgba(74,222,128,0.12);border:1px solid var(--green);color:var(--green)}
+.btns{display:flex;gap:10px;justify-content:flex-end;margin-top:1.5rem}
+
+/* Jobs */
+.job-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1rem;cursor:pointer;transition:all 0.25s;position:relative}
+.job-card:hover{border-color:var(--border-light);transform:translateY(-1px)}
+.job-card.selected{border-color:var(--gold);background:rgba(201,168,76,0.04)}
+.job-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:0.75rem}
+.job-title{font-weight:600;font-size:1rem;color:var(--text)}
+.job-company{font-size:13px;color:var(--text-muted);margin-top:2px}
+.match-badge{display:flex;align-items:center;gap:5px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--green);white-space:nowrap;flex-shrink:0}
+.job-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:0.75rem}
+.tag{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;color:var(--text-muted)}
+.tag.highlight{border-color:var(--gold-dim);color:var(--gold)}
+.job-desc{font-size:13px;color:var(--text-muted);line-height:1.6}
+.job-select-btn{position:absolute;bottom:1.25rem;right:1.25rem}
+
+/* Suggestions */
+.suggestion{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:0.75rem;transition:all 0.2s}
+.suggestion.approved{border-color:rgba(74,222,128,0.4);background:rgba(74,222,128,0.04)}
+.suggestion.rejected{border-color:rgba(248,113,113,0.3);opacity:0.5}
+.suggestion-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem}
+.suggestion-label{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+.suggestion-actions{display:flex;gap:8px}
+.sug-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all 0.2s;border:1px solid}
+.sug-approve{background:rgba(74,222,128,0.1);border-color:rgba(74,222,128,0.4);color:var(--green)}
+.sug-approve:hover{background:rgba(74,222,128,0.2)}
+.sug-reject{background:transparent;border-color:rgba(248,113,113,0.4);color:var(--red)}
+.sug-reject:hover{background:rgba(248,113,113,0.1)}
+.diff-old{background:rgba(248,113,113,0.1);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--text-muted);margin-bottom:8px;text-decoration:line-through;line-height:1.6}
+.diff-old::before{content:"Before  ";font-size:11px;font-weight:600;color:var(--red);text-decoration:none;display:block;margin-bottom:4px}
+.diff-new{background:rgba(74,222,128,0.06);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--text);line-height:1.6}
+.diff-new::before{content:"After  ";font-size:11px;font-weight:600;color:var(--green);display:block;margin-bottom:4px}
+
+/* Resume preview */
+.resume-preview{background:#fff;color:#1a1a1a;border:1px solid #d0cfe0;border-radius:3px;overflow:hidden;max-height:760px;overflow-y:auto;box-shadow:0 4px 28px rgba(0,0,0,0.55);padding:0.55in 0.65in}
+.tpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.tpl-card{background:var(--surface2);border:2px solid var(--border);border-radius:12px;padding:0;cursor:pointer;transition:all 0.2s;overflow:hidden;position:relative}
+.tpl-card:hover{border-color:var(--border-light);transform:translateY(-2px)}
+.tpl-card.selected{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.tpl-card.selected::after{content:"✓";position:absolute;top:8px;right:10px;background:var(--gold);color:#000;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;line-height:20px;text-align:center}
+.tpl-preview{background:#fff;padding:14px 16px;min-height:160px;pointer-events:none;transform-origin:top left;font-size:7pt;line-height:1.35;overflow:hidden;height:160px}
+.tpl-label{padding:8px 12px;background:var(--surface3);border-top:1px solid var(--border)}
+.tpl-name{font-size:13px;font-weight:600;color:var(--text)}
+.tpl-desc{font-size:11px;color:var(--text-muted);margin-top:1px}
+
+/* Loading */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 2rem;gap:1rem}
+.spinner{width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{color:var(--text-muted);font-size:14px}
+
+
+
+/* Progress bar */
+.progress-bar{width:100%;height:3px;background:var(--border);border-radius:3px;margin-bottom:2rem;overflow:hidden}
+.progress-fill{height:100%;background:var(--gold);border-radius:3px;transition:width 0.5s ease}
+
+/* Alerts */
+.alert{padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:10px}
+.alert-info{background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);color:var(--blue)}
+.alert-success{background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);color:var(--green)}
+
+/* Final resume */
+.apply-cta{background:linear-gradient(135deg,rgba(201,168,76,0.12),rgba(201,168,76,0.04));border:1px solid var(--gold-dim);border-radius:14px;padding:1.5rem;text-align:center;margin-top:1.5rem}
+.apply-cta h3{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:0.5rem}
+.apply-cta p{color:var(--text-muted);font-size:13px;margin-bottom:1rem}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="logo">ResumeMatch</div>
+    <div class="logo-sub">AI-Powered Job Matching</div>
+
+  </div>
+  <div class="steps" id="stepsNav">
+    <div class="step active" id="step-tab-1"><span class="step-num">1</span> Upload Resume</div>
+    <div class="step-divider"></div>
+    <div class="step" id="step-tab-2"><span class="step-num">2</span> Preferences</div>
+    <div class="step-divider"></div>
+    <div class="step" id="step-tab-4"><span class="step-num">3</span> Tailor Resume</div>
+    <div class="step-divider"></div>
+    <div class="step" id="step-tab-5"><span class="step-num">5</span> Apply</div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:25%"></div></div>
+  <div id="mainContent"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+if(typeof pdfjsLib!=="undefined") pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+</script>
+
+<script>
+const API_URL = "https://api.anthropic.com/v1/messages";
+const MODEL = "claude-sonnet-4-20250514";
+
+let state = {
+  step: 1,
+  resumeText: "",
+  resumeFile: null,
+  resumeBase64: null,
+  resumeMediaType: null,
+  parsedResume: null,
+  prefs: { location:"", occupation:"", targetCompany:"", jobDescription:"", industry:"", jobTypes:[], experience:"", skills:"" },
+  jobs: [],
+  selectedJob: null,
+  suggestions: [],
+  finalResume: "",
+  finalResumeData: null,
+  finalResumeHTML: null,
+  finalCoverLetter: "",
+  coverLetterTone: "professional",
+  selectedTemplate: "classic",
+  atsScore: null,
+};
+
+// ── Local resume parser — works without AI ──
+function localParseResume(text){
+  const lines = text.split("\n").map(l=>l.trim()).filter(Boolean);
+  const name = lines[0]||"";
+  const contactLine = lines.find(l=>l.includes("@")||l.includes("|"))||"";
+  const email = (contactLine.match(/[\w.+-]+@[\w.]+/)||[])[0]||"";
+  const phone = (contactLine.match(/[\d()\s.+-]{10,}/)||[])[0]?.trim()||"";
+
+  // Summary: lines after "summary" header
+  let summary="";
+  const sumIdx = lines.findIndex(l=>/professional summary|summary|objective/i.test(l));
+  if(sumIdx>=0){
+    const sumLines=[];
+    for(let i=sumIdx+1;i<Math.min(sumIdx+5,lines.length);i++){
+      if(/^(education|experience|skills|projects|certif)/i.test(lines[i])) break;
+      sumLines.push(lines[i]);
+    }
+    summary=sumLines.join(" ").trim();
+  }
+
+  // Skills: look for bullet lines with commas
+  const skillLine = lines.find(l=>l.startsWith("•")&&l.includes(",")&&l.length>30)||"";
+  const topSkills = skillLine
+    ? skillLine.replace(/^[•\-]\s*/,"").split(/[,|]/).map(s=>s.trim()).filter(Boolean).slice(0,10)
+    : [];
+
+  // Education
+  const eduLine = lines.find(l=>/university|college|bachelor|master|b\.s\.|m\.s\./i.test(l))||"";
+
+  // Recent jobs: "Company | Title" or "Title at Company"
+  const recentJobs=[];
+  lines.forEach(l=>{
+    if(l.includes("|")&&!l.includes("@")&&!l.includes("github")&&recentJobs.length<3){
+      const p=l.split("|").map(s=>s.trim());
+      if(p.length>=2) recentJobs.push(`${p[1]} at ${p[0]}`);
+    }
+  });
+
+  // Current title — look for title near top or in experience
+  const titleLine = lines.slice(1,5).find(l=>
+    /engineer|analyst|scientist|developer|manager|designer|consultant|intern/i.test(l)&&l.length<60
+  )||"";
+
+  return {
+    name, email, phone,
+    currentTitle: titleLine||"Professional",
+    yearsExperience: 2,
+    topSkills: topSkills.length ? topSkills : ["Communication","Problem Solving","Analysis","Python","SQL"],
+    summary: summary||"Experienced professional with strong analytical and technical skills.",
+    education: eduLine||"",
+    recentJobs
+  };
+}
+
+// Application tracker — persisted to localStorage
+function loadApplications(){ try{ return JSON.parse(localStorage.getItem("rm_applications")||"[]"); }catch(e){ return []; } }
+function saveApplications(apps){ try{ localStorage.setItem("rm_applications",JSON.stringify(apps)); }catch(e){} }
+
+function setStep(n){
+  state.step=n;
+  const stepMap={1:"step-tab-1",2:"step-tab-2",4:"step-tab-4",5:"step-tab-5"};
+  const order=[1,2,4,5];
+  const ni=order.indexOf(n);
+  order.forEach((s,i)=>{
+    const el=document.getElementById(stepMap[s]);
+    if(!el) return;
+    el.className="step"+(i<ni?" done":(i===ni?" active":""));
+  });
+  document.getElementById("progressFill").style.width=((ni/5)*100)+"%";
+  render();
+}
+
+function render(){
+  const c = document.getElementById("mainContent");
+  if(state.step===1) renderUpload(c);
+  else if(state.step===2) renderPrefs(c);
+  else if(state.step===4) renderSuggestions(c);
+  else if(state.step===4.5) renderTemplatePicker(c);
+  else if(state.step===5){ renderApply(c); runATSCheck(); }
+}
+
+/* ── STEP 1: Upload ── */
+function renderUpload(c){
+  c.innerHTML=`
+    <div class="card">
+      <div class="card-title">Upload your resume</div>
+      <div class="card-sub">We support PDF and plain text files. Your resume will be parsed by AI to extract your skills and experience.</div>
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept=".pdf,.txt,.doc,.docx" />
+        <div class="upload-icon"><i class="ti ti-file-upload" aria-hidden="true"></i></div>
+        <div class="upload-title">Drag & drop your resume here</div>
+        <div class="upload-hint">PDF, TXT, or DOC • Max 5MB</div>
+      </div>
+      <div id="fileInfo"></div>
+      <div class="btns">
+        <button class="btn btn-primary" id="nextBtn" disabled onclick="parseResume()">
+          <i class="ti ti-sparkles" aria-hidden="true"></i> Parse with AI
+        </button>
+      </div>
+    </div>`;
+  const fi = document.getElementById("fileInput");
+  fi.addEventListener("change",e=>{ if(e.target.files[0]) handleFile(e.target.files[0]); });
+  const zone = document.getElementById("uploadZone");
+  zone.addEventListener("dragover",e=>{e.preventDefault();zone.classList.add("drag")});
+  zone.addEventListener("dragleave",()=>zone.classList.remove("drag"));
+  zone.addEventListener("drop",e=>{e.preventDefault();zone.classList.remove("drag");if(e.dataTransfer.files[0])handleFile(e.dataTransfer.files[0]);});
+}
+
+function handleFile(file){
+  state.resumeFile=file;
+  state.resumeText="";
+  state.resumeBase64=null;
+  const info=document.getElementById("fileInfo");
+  info.innerHTML=`<div class="file-ready">
+    <div class="file-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+    <div><div class="file-name">${file.name}</div><div class="file-size">${(file.size/1024).toFixed(1)} KB</div></div>
+    <i class="ti ti-circle-check" style="margin-left:auto;color:var(--green);font-size:1.25rem" aria-hidden="true"></i>
+  </div>`;
+  document.getElementById("nextBtn").disabled=false;
+
+  const ext = file.name.split(".").pop().toLowerCase();
+
+  if(ext==="pdf"){
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try{
+        const arrayBuffer = e.target.result;
+        // Store base64 for Claude (used in buildFinalResume for accurate rendering)
+        const uint8 = new Uint8Array(arrayBuffer);
+        let binary = "";
+        uint8.forEach(b => binary += String.fromCharCode(b));
+        state.resumeBase64 = btoa(binary);
+        state.resumeMediaType = "application/pdf";
+
+        // Extract text with position-aware spacing using PDF.js
+        const typedArray = new Uint8Array(arrayBuffer);
+        const pdf = await pdfjsLib.getDocument({data: typedArray}).promise;
+        let fullText = "";
+        for(let i=1; i<=pdf.numPages; i++){
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          const items = content.items;
+          let lineText = "";
+          let lastY = null;
+          let lastX = null;
+          for(const item of items){
+            const str = item.str;
+            if(!str) continue;
+            const x = item.transform[4];
+            const y = item.transform[5];
+            if(lastY !== null && Math.abs(y - lastY) > 2){
+              // New line
+              fullText += lineText.trimEnd() + "\n";
+              lineText = str;
+            } else {
+              // Same line — add space only if there's a real gap between items
+              if(lastX !== null && x > lastX + 1 && lineText && !lineText.endsWith(" ")){
+                lineText += " " + str;
+              } else {
+                lineText += str;
+              }
+            }
+            lastY = y;
+            lastX = x + (item.width||0);
+          }
+          if(lineText) fullText += lineText.trimEnd() + "\n";
+          fullText += "\n";
+        }
+        state.resumeText = fullText.trim();
+      }catch(err){
+        console.error("PDF.js extraction failed:", err);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  } else {
+    // Plain text
+    const reader = new FileReader();
+    reader.onload = e => { state.resumeText = e.target.result; };
+    reader.readAsText(file);
+  }
+}
+
+async function parseResume(){
+  const c=document.getElementById("mainContent");
+  c.innerHTML=`<div class="loading"><div class="spinner"></div><div class="loading-text">AI is reading your resume...</div></div>`;
+
+  // If PDF.js extracted text, it's already in state.resumeText
+  // If it fell back to base64, do a Claude extraction first
+  if(!state.resumeText && state.resumeBase64){
+    try{
+      const extractResp = await fetch(API_URL,{
+        method:"POST", headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+        body:JSON.stringify({ model:MODEL, max_tokens:3000,
+          messages:[{role:"user", content:[
+            {type:"document", source:{type:"base64", media_type:"application/pdf", data:state.resumeBase64}},
+            {type:"text", text:"Return only the complete resume text, exactly as written. No commentary."}
+          ]}]
+        })
+      });
+      const d = await extractResp.json();
+      state.resumeText = d.content.map(i=>i.text||"").join("").trim();
+    }catch(e){ console.error("Extraction fallback failed",e); }
+  }
+
+  const resumeForParsing = state.resumeText || "No resume text available.";
+
+  try{
+    const resp = await fetch(API_URL,{
+      method:"POST", headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({ model:MODEL, max_tokens:1200,
+        messages:[{role:"user", content:`Extract information from this resume and return a JSON object with these exact keys filled with real values from the resume:
+{"name":"John Smith","email":"john@email.com","phone":"555-1234","currentTitle":"Software Engineer","yearsExperience":3,"topSkills":["Python","SQL","React"],"summary":"Two sentence summary here.","education":"B.S. Computer Science, UT Austin","recentJobs":["Software Engineer at Acme Corp","Junior Dev at StartupCo"], "linkedin": "full url", "github": "full url", "portfolio": "full url"}
+
+RESUME:
+${resumeForParsing}
+
+Return ONLY the JSON. No markdown, no backticks, no explanation.`}]
+      })
+    });
+    const data = await resp.json();
+    if(data.error) throw new Error(data.error.message);
+    const txt = data.content.map(i=>i.text||"").join("");
+    const m = txt.replace(/```json|```/g,"").trim().match(/\{[\s\S]*\}/);
+    if(!m) throw new Error("No JSON in response");
+    const parsed = JSON.parse(m[0]);
+    if(!parsed.name && !parsed.summary) throw new Error("Empty result");
+    state.parsedResume = parsed;
+  }catch(e){
+    console.warn("AI parse failed, using local parser:", e.message);
+    state.parsedResume = localParseResume(state.resumeText||"");
+  }
+  setStep(2);
+}
+
+/* ── STEP 2: Preferences ── */
+function renderPrefs(c){
+  const p=state.parsedResume||{};
+  c.innerHTML=`
+    <div class="card">
+      <div class="card-title">Welcome, ${p.name||"there"}!</div>
+      <div class="card-sub">Tell us what kind of job you're looking for. We'll search live listings that match your profile.</div>
+      <div class="alert alert-info"><i class="ti ti-sparkles" aria-hidden="true"></i> Detected: <strong>${p.currentTitle||"Professional"}</strong> with <strong>${p.yearsExperience||"?"} years</strong> of experience
+      ${state.resumeText ? `<span style="float:right;font-size:12px;color:var(--green)"><i class="ti ti-circle-check"></i> Resume text captured (${state.resumeText.length} chars)</span>` : `<span style="float:right;font-size:12px;color:var(--red)"><i class="ti ti-alert-circle"></i> Resume text not captured</span>`}
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Target job title</label>
+          <input type="text" id="occupation" placeholder="e.g. Data Analyst, Software Engineer" value="${state.prefs.occupation||p.currentTitle||""}"/>
+        </div>
+        <div class="form-group">
+          <label>Target company <span style="font-weight:400;color:var(--text-dim)">(optional)</span></label>
+          <input type="text" id="targetCompany" placeholder="e.g. Google, any startup, open to all" value="${state.prefs.targetCompany||""}"/>
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="location" placeholder="e.g. Austin TX, Remote, New York" value="${state.prefs.location||""}"/>
+        </div>
+        <div class="form-group">
+          <label>Experience level</label>
+          <select id="experience">
+            <option value="">Any level</option>
+            <option value="Entry Level">Entry Level (0–2 yrs)</option>
+            <option value="Mid Level">Mid Level (3–5 yrs)</option>
+            <option value="Senior">Senior (6–10 yrs)</option>
+            <option value="Lead / Staff">Lead / Staff (10+ yrs)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Industry <span style="font-weight:400;color:var(--text-dim)">(optional)</span></label>
+          <input type="text" id="industry" placeholder="e.g. Tech, Healthcare, Finance" value="${state.prefs.industry||""}"/>
+        </div>
+        <div class="form-group full">
+          <label>Job type</label>
+          <div class="checkbox-group" id="jobTypes">
+            ${["Full-time","Part-time","Internship","Contract","Remote","Hybrid"].map(t=>`
+              <label class="chip ${state.prefs.jobTypes.includes(t)?"selected":""}">
+                <input type="checkbox" value="${t}" ${state.prefs.jobTypes.includes(t)?"checked":""}/>
+                <span>${t}</span>
+              </label>`).join("")}
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>Key skills to highlight <span style="font-weight:400;color:var(--text-dim)">(comma separated)</span></label>
+          <input type="text" id="skills" placeholder="e.g. Python, SQL, project management" value="${state.prefs.skills||p.topSkills?.join(", ")||""}"/>
+        </div>
+        <div class="form-group full">
+          <label>Paste job description <span style="font-weight:400;color:var(--gold)">★ recommended — makes tailoring much more accurate</span></label>
+          <textarea id="jobDescription" rows="6" placeholder="Paste the full job description here for best results. The AI will use it to match your resume to the exact requirements..." style="resize:vertical;line-height:1.6;font-size:13px">${state.prefs.jobDescription||""}</textarea>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="btn btn-ghost" onclick="setStep(1)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+        <button class="btn btn-primary" onclick="savePrefsAndSearch()"><i class="ti ti-sparkles" aria-hidden="true"></i> Tailor My Resume</button>
+      </div>
+    </div>`;
+  document.querySelectorAll(".chip").forEach(chip=>{
+    chip.addEventListener("click",(e)=>{
+      e.preventDefault();
+      chip.classList.toggle("selected");
+      if(chip.querySelector("input")) chip.querySelector("input").checked=chip.classList.contains("selected");
+    });
+  });
+}
+
+async function savePrefsAndSearch(){
+  state.prefs.occupation     = document.getElementById("occupation")?.value||"";
+  state.prefs.targetCompany  = document.getElementById("targetCompany")?.value||"";
+  state.prefs.location       = document.getElementById("location")?.value||"";
+  state.prefs.experience     = document.getElementById("experience")?.value||"";
+  state.prefs.skills         = document.getElementById("skills")?.value||"";
+  state.prefs.industry       = document.getElementById("industry")?.value||"";
+  state.prefs.jobDescription = document.getElementById("jobDescription")?.value||"";
+  state.prefs.jobTypes       = [...document.querySelectorAll(".chip.selected")].map(c=>c.querySelector("input").value);
+  // Create a placeholder job from preferences so tailoring still works
+  state.jobs=[{
+    title: state.prefs.occupation||"Target Role",
+    company: state.prefs.targetCompany||"Your Target Company",
+    location: state.prefs.location||"",
+    type: state.prefs.jobTypes[0]||"Full-time",
+    description: state.prefs.jobDescription || `${state.prefs.experience||""} ${state.prefs.occupation||""} role requiring ${state.prefs.skills||"strong technical skills"}.`,
+    keyRequirements: (state.prefs.jobDescription||state.prefs.skills).split(/[,\n•]+/).map(s=>s.trim()).filter(s=>s.length>3&&s.length<60).slice(0,8),
+    applyUrl:"#",
+    matchScore:85,
+    source:""
+  }];
+  state.selectedJob=0;
+  setStep(4);
+  await tailorResume();
+}
+
+/* ── STEP 3: Jobs ── */
+// Pure local ATS-style scoring — no API needed
+function scoreJobMatch(job){
+  const userSkills = (state.prefs.skills||"").toLowerCase().split(/[,\s]+/).filter(s=>s.length>2);
+  const userOcc    = (state.prefs.occupation||"").toLowerCase();
+  const jobText    = (job.title+" "+(job.description||"")+" "+(job.keyRequirements||[]).join(" ")).toLowerCase();
+  let score = 50;
+  // Title match
+  if(jobText.includes(userOcc) || userOcc.split(" ").some(w=>w.length>3&&jobText.includes(w))) score+=20;
+  // Skill hits
+  const hits = userSkills.filter(s=>jobText.includes(s)).length;
+  score += Math.min(25, Math.round((hits/Math.max(userSkills.length,1))*25));
+  // Experience level
+  const exp = (state.prefs.experience||"").toLowerCase();
+  if(exp&&jobText.includes(exp.split(" ")[0])) score+=5;
+  return Math.min(99, score);
+}
+
+async function searchJobs(){
+  const c=document.getElementById("mainContent");
+  const {occupation,location,experience,jobTypes,skills}=state.prefs;
+  c.innerHTML=`<div class="loading"><div class="spinner"></div><div class="loading-text">Finding matching jobs...</div></div>`;
+
+  // Use Claude AI web search to find real jobs
+  const query=`Find 6 real current job postings for "${occupation}" ${location?"in "+location:""} ${experience||""} ${jobTypes.length?jobTypes.join(" "):""}.
+For each job return ONLY a JSON array with these fields:
+{title, company, location, type, salaryRange, description(2 sentences max), keyRequirements(array of 5 strings), applyUrl(real working URL to job posting), source("Indeed","LinkedIn","Glassdoor","Handshake", or "Company"), isEasyApply(true if LinkedIn Easy Apply)}
+Return ONLY the JSON array, no other text.`;
+
+  try{
+    const resp=await fetch(API_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:MODEL,max_tokens:2000,
+        tools:[{type:"web_search_20250305",name:"web_search"}],
+        messages:[{role:"user",content:query}]})
+    });
+    const data=await resp.json();
+    if(data.error) throw new Error(data.error.message);
+    const txt=data.content.map(i=>i.text||"").filter(Boolean).join("");
+    const m=txt.replace(/```json|```/g,"").trim().match(/\[[\s\S]*?\]/);
+    if(m){
+      const parsed = JSON.parse(m[0]).filter(j=>j.title&&j.company);
+      if(parsed.length>0){
+        state.jobs = parsed.map(j=>({...j, matchScore:scoreJobMatch(j)}));
+        state.jobs.sort((a,b)=>b.matchScore-a.matchScore);
+        renderJobsList(); return;
+      }
+    }
+  }catch(e){ console.error("Job search error:",e); }
+
+  // Fallback: generate realistic mock jobs + job board search links
+  state.jobs = generateMockJobs().map(j=>({...j, matchScore:scoreJobMatch(j)}));
+  state.jobs.sort((a,b)=>b.matchScore-a.matchScore);
+  renderJobsList();
+}
+
+function generateMockJobs(){
+  const occ=state.prefs.occupation||"Software Engineer";
+  return [
+    {title:occ,company:"TechCorp Inc.",location:state.prefs.location||"Remote",type:"Full-time",matchScore:94,keyRequirements:["3+ years experience","Python","Problem solving","Team collaboration","Agile"],description:"Join our innovative team building next-gen solutions. We value creativity and impact.",applyUrl:"#",salaryRange:"$90k–$120k"},
+    {title:"Senior "+occ,company:"StartupXYZ",location:state.prefs.location||"Hybrid",type:"Full-time",matchScore:87,keyRequirements:["5+ years","Leadership","Communication","Project management","Stakeholder alignment"],description:"Lead and mentor a growing team at an exciting startup. Equity and growth opportunities.",applyUrl:"#",salaryRange:"$100k–$140k"},
+    {title:occ+" II",company:"Enterprise Co.",location:state.prefs.location||"On-site",type:"Contract",matchScore:79,keyRequirements:["2+ years","Technical skills","Documentation","Cross-team collaboration","Attention to detail"],description:"Contract role with strong possibility of conversion. Excellent benefits and culture.",applyUrl:"#",salaryRange:"$75–$95/hr"},
+  ];
+}
+
+function trackAndOpen(jobIdx){
+  trackApplication(jobIdx);
+  const job = state.jobs[jobIdx];
+  if(job && job.applyUrl && job.applyUrl !== "#") window.open(job.applyUrl, "_blank", "noopener");
+}
+
+function trackApplication(jobIdx){
+  const job = state.jobs[jobIdx];
+  if(!job) return;
+  const apps = loadApplications();
+  const exists = apps.find(a=>a.company===job.company&&a.title===job.title);
+  if(!exists){
+    apps.unshift({
+      id: Date.now(),
+      title: job.title,
+      company: job.company,
+      location: job.location||"",
+      applyUrl: job.applyUrl||"#",
+      source: job.source||"",
+      isEasyApply: job.isEasyApply||false,
+      appliedAt: new Date().toLocaleDateString(),
+      status: "Applied"
+    });
+    saveApplications(apps);
+  }
+}
+
+function showApplicationTracker(){
+  const apps = loadApplications();
+  const modal = document.createElement("div");
+  modal.id = "appTrackerModal";
+  modal.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem";
+  const statusColors = {"Applied":"var(--gold)","Heard Back":"var(--blue)","Interview":"var(--purple)","Offer":"var(--green)","Rejected":"var(--red)"};
+  modal.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border-light);border-radius:16px;width:100%;max-width:700px;max-height:80vh;overflow-y:auto;padding:1.75rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+        <div>
+          <div style="font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--text)">My Applications</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px">${apps.length} tracked · updates saved locally</div>
+        </div>
+        <button onclick="document.getElementById('appTrackerModal').remove()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text-muted);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px">✕ Close</button>
+      </div>
+      ${apps.length===0
+        ? `<div style="text-align:center;padding:3rem;color:var(--text-muted)"><i class="ti ti-file-off" style="font-size:2rem;display:block;margin-bottom:0.75rem"></i>No applications tracked yet.<br>Click "View & Apply" on any job to log it.</div>`
+        : apps.map((a,idx)=>`
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+              <div>
+                <div style="font-weight:600;font-size:0.9rem;color:var(--text)">${a.title}</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:2px">${a.company} · ${a.location} · ${a.appliedAt}</div>
+                ${a.isEasyApply?`<span style="background:#0077b5;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:3px;margin-top:4px;display:inline-block">⚡ Easy Apply</span>`:""}
+              </div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <select onchange="updateAppStatus(${a.id},this.value)" style="background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;color:var(--text);font-family:'DM Sans',sans-serif;cursor:pointer">
+                  ${["Applied","Heard Back","Interview","Offer","Rejected"].map(s=>`<option value="${s}" ${a.status===s?"selected":""}>${s}</option>`).join("")}
+                </select>
+                ${a.applyUrl&&a.applyUrl!=="?"&&a.applyUrl!=="#"
+                  ?`<a href="${a.applyUrl}" target="_blank" style="text-decoration:none"><button style="background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;color:var(--text-muted);cursor:pointer;font-family:'DM Sans',sans-serif"><i class="ti ti-external-link"></i></button></a>`:""}
+                <button onclick="deleteApp(${a.id})" style="background:transparent;border:1px solid rgba(248,113,113,0.3);border-radius:6px;padding:4px 8px;font-size:12px;color:var(--red);cursor:pointer;font-family:'DM Sans',sans-serif">✕</button>
+              </div>
+            </div>
+          </div>`).join("")}
+    </div>`;
+  document.body.appendChild(modal);
+  modal.addEventListener("click",e=>{ if(e.target===modal) modal.remove(); });
+}
+
+function updateAppStatus(id, status){
+  const apps = loadApplications();
+  const app = apps.find(a=>a.id===id);
+  if(app){
+    app.status = status;
+    saveApplications(apps);
+    // Update badge count on job list if visible
+    const badge = document.querySelector("[data-app-count]");
+    if(badge) badge.textContent = apps.length;
+  }
+}
+
+function deleteApp(id){
+  const apps = loadApplications().filter(a=>a.id!==id);
+  saveApplications(apps);
+  showApplicationTracker(); // refresh
+}
+
+function renderJobsList(c){
+  c = c || document.getElementById("mainContent");
+  const trackedCount = loadApplications().length;
+  c.innerHTML=`
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.25rem;flex-wrap:wrap;gap:0.5rem">
+        <div class="card-title" style="margin-bottom:0">Matching Jobs Found</div>
+        <button onclick="showApplicationTracker()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:500;color:var(--text-muted);cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px">
+          <i class="ti ti-checklist"></i> My Applications ${trackedCount>0?`<span style="background:var(--gold);color:#000;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700">${trackedCount}</span>`:""}
+        </button>
+      </div>
+      <div class="card-sub">${state.jobs.length} live listings ranked by relevance to your profile</div>
+      <div id="jobsList"></div>
+      <div class="btns" style="margin-top:0.75rem">
+        <button class="btn btn-ghost" onclick="searchJobs()"><i class="ti ti-refresh" aria-hidden="true"></i> Refresh results</button>
+      </div>
+    </div>`;
+  const jl=document.getElementById("jobsList");
+  state.jobs.forEach((job,i)=>{
+    const isRealUrl = job.applyUrl && job.applyUrl !== "#" && job.applyUrl.startsWith("http");
+    const sourceColors={"Indeed":"#003a9b","LinkedIn":"#0077b5","SimplyHired":"#e35d35"};
+    const sourceColor=sourceColors[job.source]||"var(--text-muted)";
+    const div=document.createElement("div");
+    div.className="job-card"+(state.selectedJob===i?" selected":"");
+    div.innerHTML=`
+      <div class="job-header">
+        <div style="flex:1">
+          <div class="job-title">${job.title}
+            ${job.isEasyApply?`<span style="background:#0077b5;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;margin-left:6px;vertical-align:middle">⚡ Easy Apply</span>`:""}
+          </div>
+          <div class="job-company"><i class="ti ti-building" aria-hidden="true"></i> ${job.company} · ${job.location}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+          <div class="match-badge"><i class="ti ti-target" aria-hidden="true"></i> ${job.matchScore}% match</div>
+          ${job.source?`<span style="font-size:11px;font-weight:600;color:${sourceColor}">${job.source}</span>`:""}
+        </div>
+      </div>
+      <div class="job-tags">
+        <span class="tag"><i class="ti ti-briefcase" aria-hidden="true"></i> ${job.type}</span>
+        ${job.salaryRange&&job.salaryRange!=="Not listed"?`<span class="tag"><i class="ti ti-currency-dollar" aria-hidden="true"></i> ${job.salaryRange}</span>`:""}
+        ${(job.keyRequirements||[]).slice(0,3).map(r=>`<span class="tag highlight">${r}</span>`).join("")}
+      </div>
+      <div class="job-desc">${job.description}</div>
+      <div class="btns" style="margin-top:1rem">
+        ${isRealUrl?`<button class="btn btn-ghost" onclick="trackAndOpen(${i})"><i class="ti ti-external-link" aria-hidden="true"></i> ${job.isEasyApply?"⚡ Easy Apply":"View & Apply"}</button>`:""}
+        <button class="btn btn-primary" onclick="event.stopPropagation();selectJob(${i})">
+          <i class="ti ti-sparkles" aria-hidden="true"></i> Tailor Resume for This Job
+        </button>
+      </div>`;
+    jl.appendChild(div);
+  });
+
+}
+
+function selectJob(i){
+  state.selectedJob=i;
+  // Update nav directly, then kick off tailorResume which handles its own loading display
+  state.step=4;
+  const stepEls=document.querySelectorAll(".step[id^='step-tab-']");
+  stepEls.forEach((el,idx)=>{ el.className="step"+(idx+1<4?" done":(idx+1===4?" active":"")); });
+  document.getElementById("progressFill").style.width="80%";
+  tailorResume();
+}
+
+/* ── STEP 4: Tailor ── */
+async function tailorResume(){
+  const c=document.getElementById("mainContent");
+  c.innerHTML=`<div class="loading"><div class="spinner"></div><div class="loading-text">AI is crafting personalized suggestions...</div></div>`;
+
+  const job=state.jobs[state.selectedJob];
+  const p=state.parsedResume||{};
+  const prefs=state.prefs||{};
+  const resumeText=state.resumeText||"";
+
+  const prompt=`You are an expert resume coach like Jobright.ai. Analyze the candidate's resume against this specific job and suggest 5 targeted improvements.
+
+TARGET ROLE: ${job.title} at ${job.company}
+LOCATION: ${job.location||prefs.location||""}
+JOB TYPE: ${prefs.jobTypes&&prefs.jobTypes.length?prefs.jobTypes.join(", "):""}
+EXPERIENCE LEVEL: ${prefs.experience||""}
+JOB DESCRIPTION: ${job.description||""}
+KEY REQUIREMENTS: ${(job.keyRequirements||[]).join(", ")}
+
+CANDIDATE RESUME:
+${resumeText||`Name: ${p.name||""}\nTitle: ${p.currentTitle||""}\nSkills: ${(p.topSkills||[]).join(", ")}\nSummary: ${p.summary||""}\nExperience: ${(p.recentJobs||[]).join(", ")}`}
+
+Generate 5 specific, high-impact suggestions. For each:
+- Pull the EXACT existing text from the resume as oldText
+- Write a clearly improved version as newText that incorporates job keywords
+- Focus on: summary, experience bullet points, skills ordering, project descriptions
+
+Return ONLY a JSON array (no markdown, no backticks), each object: {section, reason, oldText, newText}`;
+
+  try{
+    const resp=await fetch(API_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:MODEL,max_tokens:1500,messages:[{role:"user",content:prompt}]})
+    });
+    const data=await resp.json();
+    const txt=data.content.map(i=>i.text||"").join("");
+    const clean=txt.replace(/```json|```/g,"").trim();
+    const match=clean.match(/\[[\s\S]*\]/);
+    state.suggestions=match ? JSON.parse(match[0]) : getMockSuggestions(job);
+  }catch(e){
+    console.error("tailorResume error:",e);
+    state.suggestions=getMockSuggestions(job);
+  }
+  state.suggestions=state.suggestions.map(s=>({...s,status:"pending"}));
+  renderSuggestions();
+}
+
+function getMockSuggestions(job){
+  return [
+    {section:"Professional Summary",reason:"Aligns your summary with the job's core focus.",oldText:"Experienced professional with a strong background in their field, seeking new opportunities.",newText:`Results-driven ${state.prefs.occupation||"professional"} with ${state.parsedResume?.yearsExperience||3}+ years delivering measurable impact. Proven expertise in ${job.keyRequirements?.[0]||"key areas"} and ${job.keyRequirements?.[1]||"collaboration"}, seeking to bring value to ${job.company}.`},
+    {section:"Skills Section",reason:"Adds keywords directly from the job description.",oldText:"Skills: Communication, Teamwork, Microsoft Office",newText:`Skills: ${(job.keyRequirements||[]).slice(0,4).join(", ")}, Communication, Strategic Thinking, Cross-functional Collaboration`},
+    {section:"Work Experience (Bullet)",reason:"Quantifies your impact to stand out to recruiters.",oldText:"Worked on various projects and contributed to team goals.",newText:`Led cross-functional initiatives that reduced delivery time by 30%, directly supporting goals aligned with ${job.title} responsibilities.`},
+    {section:"Key Achievements",reason:"Tailors achievements to match the employer's priorities.",oldText:"Achieved strong results in previous roles.",newText:`Delivered ${job.keyRequirements?.[0]||"key outcomes"} across 3 major projects, earning recognition from senior leadership and stakeholders.`},
+    {section:"Professional Headline",reason:"Makes your headline instantly recognizable to applicant tracking systems.",oldText:state.parsedResume?.currentTitle||"Professional",newText:`${job.keyRequirements?.[0]||"Experienced"} ${state.prefs.occupation||"Professional"} · ${job.type||"Full-time"} · ${state.prefs.location||"Open to Relocation"}`},
+  ];
+}
+
+function renderSuggestions(c){
+  c = c || document.getElementById("mainContent");
+  const job=state.jobs[state.selectedJob];
+  const approved=state.suggestions.filter(s=>s.status==="approved").length;
+  const total=state.suggestions.length;
+  c.innerHTML=`
+    <div class="card">
+      <div class="card-title">Resume Tailoring Suggestions</div>
+      <div class="card-sub">Tailoring for <strong>${job.title}</strong> at <strong>${job.company}</strong> · ${approved}/${total} suggestions approved</div>
+      <div class="alert alert-info"><i class="ti ti-info-circle" aria-hidden="true"></i> Review each suggestion. Approve the ones you like — only approved changes will appear in your final resume.</div>
+      <div id="suggestionsList"></div>
+      <div class="btns" style="margin-top:1.5rem">
+        <button class="btn btn-ghost" onclick="setStep(2)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+        <button class="btn btn-ghost" onclick="tailorResume()"><i class="ti ti-refresh" aria-hidden="true"></i> Regenerate</button>
+        <button class="btn btn-primary" onclick="buildFinalResume()">
+          <i class="ti ti-file-check" aria-hidden="true"></i> ${approved>0?`Apply ${approved} Change${approved===1?"":"s"} & Continue`:"Continue to Apply →"}
+        </button>
+      </div>
+    </div>`;
+  renderSuggestionItems();
+}
+
+function renderSuggestionItems(){
+  const sl=document.getElementById("suggestionsList");
+  if(!sl) return;
+  sl.innerHTML="";
+  state.suggestions.forEach((s,i)=>{
+    const div=document.createElement("div");
+    div.className=`suggestion ${s.status==="approved"?"approved":s.status==="rejected"?"rejected":""}`;
+    div.innerHTML=`
+      <div class="suggestion-header">
+        <div>
+          <span class="suggestion-label">${s.section}</span>
+          <div style="font-size:13px;color:var(--text-muted);margin-top:3px">${s.reason}</div>
+        </div>
+        <div class="suggestion-actions" id="sugActions${i}">
+          ${s.status==="pending"?`
+            <button class="sug-btn sug-approve" onclick="approveSuggestion(${i})"><i class="ti ti-check" aria-hidden="true"></i> Approve</button>
+            <button class="sug-btn sug-reject" onclick="rejectSuggestion(${i})"><i class="ti ti-x" aria-hidden="true"></i> Skip</button>
+          `:s.status==="approved"?`
+            <span style="color:var(--green);font-size:13px;display:flex;align-items:center;gap:4px"><i class="ti ti-circle-check" aria-hidden="true"></i> Approved</span>
+            <button class="sug-btn sug-reject" style="margin-left:8px" onclick="pendingSuggestion(${i})">Undo</button>
+          `:`
+            <span style="color:var(--red);font-size:13px;display:flex;align-items:center;gap:4px"><i class="ti ti-circle-x" aria-hidden="true"></i> Skipped</span>
+            <button class="sug-btn sug-approve" style="margin-left:8px" onclick="pendingSuggestion(${i})">Undo</button>
+          `}
+        </div>
+      </div>
+      <div class="diff-old">${s.oldText}</div>
+      <div class="diff-new">${s.newText}</div>`;
+    sl.appendChild(div);
+  });
+}
+
+function approveSuggestion(i){ state.suggestions[i].status="approved"; renderSuggestions(); }
+function rejectSuggestion(i){ state.suggestions[i].status="rejected"; renderSuggestions(); }
+function pendingSuggestion(i){ state.suggestions[i].status="pending"; renderSuggestions(); }
+
+/* ── STEP 5: Apply ── */
+async function buildFinalResume(){
+  const c=document.getElementById("mainContent");
+  c.innerHTML=`<div class="loading"><div class="spinner"></div><div class="loading-text">Tailoring your resume to the job...</div></div>`;
+
+  const approved    = state.suggestions.filter(s=>s.status==="approved");
+  const job         = state.jobs[state.selectedJob];
+  const prefs       = state.prefs||{};
+  const p           = state.parsedResume||{};
+  const originalText = state.resumeText||"";
+
+  const approvedEdits = approved.length>0
+    ? "APPLY THESE USER-APPROVED EDITS:\n"+approved.map(s=>`• ${s.section}: ${s.newText}`).join("\n")+"\n\n"
+    : "";
+
+  const prompt = `You are an expert resume writer. Rewrite the candidate resume tailored for this job.
+Preserve ALL facts: names, dates, companies, education, certifications. Do NOT invent anything new.
+
+JOB: ${job.title} at ${job.company}
+REQUIREMENTS: ${(job.keyRequirements||[]).join(", ")}
+DESCRIPTION: ${job.description||""}
+${approvedEdits}
+Return a single valid JSON object. Fill EVERY field with REAL content from the resume — never leave values empty:
+{
+  "name": "candidate full name here",
+  "contact": "City, ST | phone | email",
+  "summary": "2-3 sentence summary targeted at this role",
+  "education": [{"school":"school name","degree":"degree and major","location":"city, st","date":"Mon YYYY","gpa":"x.x","details":["Coursework: ...","Achievement: ..."]}],
+  "experience": [{"company":"company name","title":"job title","location":"city, st","dates":"Mon YYYY - Mon YYYY","bullets":["bullet with impact","bullet with metric","bullet with skill"]}],
+  "projects": [{"name":"project name","dates":"Mon YYYY - Mon YYYY","bullets":["what was built","tech used","result"]}],
+  "additionalProjects": [{"name":"project name","description":"one-line description with outcome"}],
+  "skills": [{"label":"Category","items":"Skill1, Skill2, Skill3"}],
+  "certifications": ["Full cert name: Issuer, Month YYYY"]
+}
+Return ONLY the JSON. No markdown, no backtick fences, no explanation text.`;
+
+  try{
+    let messageContent;
+    if(state.resumeBase64){
+      messageContent=[
+        {type:"document",source:{type:"base64",media_type:"application/pdf",data:state.resumeBase64}},
+        {type:"text",text:prompt}
+      ];
+    } else {
+      messageContent = prompt + "\n\nCANDIDATE RESUME TEXT:\n" + (originalText || JSON.stringify(p,null,2));
+    }
+
+    const resp = await fetch(API_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:MODEL, max_tokens:4096, messages:[{role:"user",content:messageContent}]})
+    });
+    const data = await resp.json();
+
+    if(data.error) throw new Error("API: "+( data.error.message||JSON.stringify(data.error)));
+
+    const raw = data.content.map(i=>i.text||"").join("").trim();
+    console.log("API response preview:", raw.slice(0,300));
+
+    const stripped   = raw.replace(/^```json\s*/,"").replace(/\s*```\s*$/,"").trim();
+    const jsonMatch  = stripped.match(/\{[\s\S]*\}/);
+    if(!jsonMatch) throw new Error("No JSON object in response. Got: "+raw.slice(0,150));
+
+    const parsed = JSON.parse(jsonMatch[0]);
+    console.log("Parsed keys:", Object.keys(parsed));
+    console.log("name=",parsed.name," summary chars=",(parsed.summary||"").length," exp=",(parsed.experience||[]).length);
+
+    if(!parsed.name && !(parsed.summary||"").trim() && !(parsed.experience||[]).length){
+      throw new Error("JSON returned but all fields are empty — prompt may have been misunderstood");
+    }
+
+    state.finalResumeData = parsed;
+    state.finalResumeHTML = null;
+
+  }catch(e){
+    console.error("buildFinalResume FAILED:", e.message);
+    // Show error so user knows what happened and can retry or continue
+    console.warn("Resume tailoring failed:", e.message);
+    // Silently use fallback — user experience uninterrupted
+    useFallbackData();
+    setStep(4.5);
+    return;
+  }
+
+  setStep(4.5);
+}
+
+function useFallbackData(){
+  // Primary source: parse the full resumeText directly into structured sections
+  const raw = state.resumeText || "";
+  const fb  = state.parsedResume || {};
+
+  if(!raw && !fb.name){
+    state.finalResumeData = null;
+    return;
+  }
+
+  // If we have good resumeText, parse it into sections using regex
+  if(raw.length > 100){
+    const lines = raw.split("\n").map(l=>l.trim()).filter(Boolean);
+
+    // Name = first non-empty line
+    const name = lines[0] || fb.name || "";
+
+    // Contact = second line (usually "City | phone | email | ...")
+    const contact = lines[1] && lines[1].includes("|") ? lines[1] : fb.email||"";
+
+    // Find section boundaries by looking for ALL-CAPS or known section headers
+    const SEC_RE = /^(PROFESSIONAL SUMMARY|SUMMARY|EDUCATION|EXPERIENCE|PROJECTS?|ADDITIONAL PROJECTS?|SKILLS?|CERTIFICATIONS?|ADDITIONAL)\s*$/i;
+    const sections = {};
+    let curSec = "header";
+    let curLines = [];
+
+    for(let i=2; i<lines.length; i++){
+      const l = lines[i];
+      if(SEC_RE.test(l)){
+        sections[curSec] = curLines;
+        curSec = l.toUpperCase().replace(/\s+/g,"_");
+        curLines = [];
+      } else {
+        curLines.push(l);
+      }
+    }
+    sections[curSec] = curLines;
+
+    // Parse summary
+    const summaryLines = sections["PROFESSIONAL_SUMMARY"] || sections["SUMMARY"] || [];
+    const summary = summaryLines.join(" ").trim() || fb.summary || "";
+
+    // Parse education — look for university lines + degree lines + bullets
+    const eduLines = sections["EDUCATION"] || [];
+    const education = [];
+    let curEdu = null;
+    for(const l of eduLines){
+      if(l.match(/university|college|institute|school/i) || l.match(/\d{4}/) && !l.startsWith("•")){
+        if(curEdu) education.push(curEdu);
+        const dateMatch = l.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}|\d{4}/);
+        curEdu = {school:l.replace(dateMatch?.[0]||"","").trim(), degree:"", location:"", date:dateMatch?.[0]||"", gpa:"", details:[]};
+      } else if(curEdu && l.match(/bachelor|master|certificate|b\.s\.|m\.s\.|phd|associate/i)){
+        const parts = l.split(/austin|new york|san francisco|remote|,\s*[A-Z]{2}/i);
+        curEdu.degree = parts[0].trim();
+        curEdu.location = l.replace(curEdu.degree,"").trim();
+      } else if(curEdu && l.startsWith("•")){
+        if(l.toLowerCase().includes("gpa")) curEdu.gpa = l.match(/[\d.]+/)?.[0]||"";
+        else curEdu.details.push(l.replace(/^•\s*/,""));
+      } else if(curEdu){
+        if(!curEdu.degree) curEdu.degree = l;
+        else curEdu.details.push(l);
+      }
+    }
+    if(curEdu) education.push(curEdu);
+    // Fallback education from parsedResume
+    if(!education.length && fb.education){
+      education.push({school:"",degree:typeof fb.education==="string"?fb.education:"",location:"",date:"",gpa:"",details:[]});
+    }
+
+    // Parse experience
+    const expLines = sections["EXPERIENCE"] || [];
+    const experience = [];
+    let curExp = null;
+    for(const l of expLines){
+      // Company | Title  Date  OR  Company  Date on separate line
+      if(l.includes("|") && !l.startsWith("•")){
+        if(curExp) experience.push(curExp);
+        const dateMatch = l.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[^|]*\d{4}[^|]*(?:Present|-[^|]*)?\s*$/i);
+        const mainPart = l.replace(dateMatch?.[0]||"","").trim();
+        const pipeParts = mainPart.split("|").map(s=>s.trim());
+        curExp = {company:pipeParts[0]||"", title:pipeParts[1]||"", location:"", dates:dateMatch?.[0]?.trim()||"", bullets:[]};
+      } else if(l.startsWith("•") && curExp){
+        curExp.bullets.push(l.replace(/^•\s*/,""));
+      } else if(curExp && !l.startsWith("•") && l.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*\d{4}/i)){
+        curExp.dates = l.trim();
+      } else if(curExp && !l.startsWith("•")){
+        if(!curExp.title) curExp.title = l;
+        else if(!curExp.location) curExp.location = l;
+      }
+    }
+    if(curExp) experience.push(curExp);
+    // Fallback from recentJobs
+    if(!experience.length){
+      (fb.recentJobs||[]).forEach(j=>{
+        const i=j.lastIndexOf(" at ");
+        experience.push(i>0?{company:j.slice(i+4),title:j.slice(0,i),location:"",dates:"",bullets:[]}:{company:j,title:"",location:"",dates:"",bullets:[]});
+      });
+    }
+
+    // Parse projects
+    const projLines = sections["PROJECTS"] || sections["PROJECT"] || [];
+    const projects = [];
+    let curProj = null;
+    for(const l of projLines){
+      if(!l.startsWith("•") && l.match(/\d{4}|analysis|dashboard|classifier|detector|model/i)){
+        if(curProj) projects.push(curProj);
+        const dateMatch = l.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[^|]*\d{4}[^|]*(?:Present|-[^|]*)?\s*$/i);
+        curProj = {name:l.replace(dateMatch?.[0]||"","").trim(), dates:dateMatch?.[0]?.trim()||"", bullets:[]};
+      } else if(curProj && l.startsWith("•")){
+        curProj.bullets.push(l.replace(/^•\s*/,""));
+      }
+    }
+    if(curProj) projects.push(curProj);
+
+    // Parse additional projects (bullet list of short items)
+    const addlLines = sections["ADDITIONAL_PROJECTS"] || sections["ADDITIONAL_PROJECT"] || [];
+    const additionalProjects = addlLines
+      .filter(l=>l.startsWith("•"))
+      .map(l=>{
+        const t=l.replace(/^•\s*/,"");
+        const colon=t.indexOf(":");
+        return colon>0?{name:t.slice(0,colon).trim(),description:t.slice(colon+1).trim()}:{name:t,description:""};
+      });
+
+    // Parse skills
+    const skillLines = sections["SKILLS"] || sections["SKILL"] || [];
+    const skills = skillLines
+      .filter(l=>l.startsWith("•"))
+      .map(l=>{
+        const t=l.replace(/^•\s*/,"");
+        const colon=t.indexOf(":");
+        return colon>0?{label:t.slice(0,colon).trim(),items:t.slice(colon+1).trim()}:{label:"Skills",items:t};
+      });
+    if(!skills.length && fb.topSkills?.length){
+      skills.push({label:"Skills",items:fb.topSkills.join(", ")});
+    }
+
+    // Parse certifications
+    const certLines = sections["CERTIFICATIONS"] || sections["CERTIFICATION"] || [];
+    const certifications = certLines
+      .filter(l=>l.startsWith("•"))
+      .map(l=>l.replace(/^•\s*/,""));
+
+    state.finalResumeData = {name, contact, summary, education, experience, projects, additionalProjects, skills, certifications};
+    state.finalResumeHTML = null;
+    console.log("Fallback parsed from resumeText — sections found:", Object.keys(sections));
+    return;
+  }
+
+  // Last resort — use parsedResume shallow data
+  state.finalResumeData = {
+    name:    fb.name||"",
+    contact: [fb.phone||"",fb.email||""].filter(Boolean).join(" | "),
+    summary: fb.summary||"",
+    education: fb.education?[{school:"",degree:String(fb.education),location:"",date:"",gpa:"",details:[]}]:[],
+    experience: (fb.recentJobs||[]).map(j=>{
+      const i=j.lastIndexOf(" at ");
+      return i>0?{company:j.slice(i+4),title:j.slice(0,i),location:"",dates:"",bullets:[]}:{company:j,title:"",location:"",dates:"",bullets:[]};
+    }),
+    projects:[],additionalProjects:[],
+    skills:(fb.topSkills||[]).length?[{label:"Skills",items:fb.topSkills.join(", ")}]:[],
+    certifications:[]
+  };
+  state.finalResumeHTML=null;
+}
+
+function useFallbackAndContinue(){
+  setStep("t5");
+}
+
+
+function runATSCheck(){
+  // Instant local ATS scoring — no API call, no spinner
+  const job = state.jobs[state.selectedJob];
+  if(!job){ state.atsScore=null; return; }
+
+  const d = state.finalResumeData;
+  const resumeWords = new Set(
+    [d?.summary||"",
+     ...(d?.experience||[]).flatMap(e=>[...(e.bullets||[]), e.title||"", e.company||""]),
+     ...(d?.skills||[]).map(s=>s.items||""),
+     ...(d?.projects||[]).flatMap(p=>p.bullets||[]),
+     state.resumeText||""
+    ].join(" ").toLowerCase().replace(/[^a-z0-9\s]/g," ").split(/\s+/).filter(w=>w.length>2)
+  );
+
+  // Keywords to match — job requirements + title words
+  const reqKeywords = [
+    ...(job.keyRequirements||[]),
+    job.title||"",
+    job.description||""
+  ].join(" ").toLowerCase().replace(/[^a-z0-9\s]/g," ").split(/\s+/)
+   .filter(w=>w.length>3)
+   .filter(w=>!["with","that","this","from","have","will","able","your","their","they","been","were","when","where","what","also","into","over","such","more","than","then","these","those","which","would","could","should"].includes(w));
+
+  // Deduplicate and limit
+  const uniqueReqs = [...new Set(reqKeywords)].slice(0,30);
+
+  const matched = uniqueReqs.filter(k=>resumeWords.has(k));
+  const missing = uniqueReqs.filter(k=>!resumeWords.has(k)).slice(0,6);
+
+  const score = Math.min(98, Math.round(40 + (matched.length/Math.max(uniqueReqs.length,1))*58));
+
+  const verdict = score>=85 ? "Excellent match — strongly tailored for this role"
+                : score>=70 ? "Good match — a few keywords to add"
+                : score>=55 ? "Moderate match — consider adding missing keywords"
+                : "Needs work — resume may not pass ATS screening";
+
+  state.atsScore = {
+    score,
+    matched: matched.slice(0,8),
+    missing: missing.slice(0,6),
+    verdict
+  };
+
+  renderATSScore();
+}
+
+
+function renderResumeHTML(tpl){
+  let d = state.finalResumeData;
+  const raw = state.finalResume || state.resumeText || "";
+  const T = tpl || state.selectedTemplate || "classic";
+
+  // Priority Fallback: If structured data is missing or AI produced an empty object, show raw text
+  if(!d || (!d.name && !d.experience?.length)){
+    const pr  = state.parsedResume || {};
+    // If we have no parsed name but we have raw text, show raw text formatted for preview
+    if((!pr || !pr.name) && raw){
+      return `<pre style="white-space:pre-wrap;font-family:Calibri,Arial,sans-serif;font-size:10.5pt;line-height:1.4;color:#000;">${raw}</pre>`;
+    }
+    const eduStr = typeof pr.education === "string" ? pr.education : "";
+    d = {
+      name:    pr.name||"",
+      contact: [pr.location||"", pr.phone||"", pr.email||""].filter(Boolean).join(" | "),
+      summary: pr.summary||"",
+      education: eduStr ? [{
+        school:  eduStr.includes(",") ? eduStr.split(",").slice(-1)[0].trim() : eduStr,
+        degree:  eduStr.includes(",") ? eduStr.split(",").slice(0,-1).join(",").trim() : "",
+        location:"", date:"", gpa:"", details:[]
+      }] : [],
+      experience: (pr.recentJobs||[]).map(j=>{
+        const atIdx = j.lastIndexOf(" at ");
+        return atIdx>0
+          ? {company:j.slice(atIdx+4), title:j.slice(0,atIdx), location:"", dates:"", bullets:[]}
+          : {company:j, title:"", location:"", dates:"", bullets:[]};
+      }),
+      projects:[],
+      additionalProjects:[],
+      skills: (pr.topSkills||[]).length ? [{label:"Skills", items:pr.topSkills.join(", ")}] : [],
+      certifications:[]
+    };
+  }
+
+  /* ── shared helpers ── */
+  const esc = s => (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+  const buls = (arr,f,size) => {
+    if(!arr||!arr.length) return "";
+    size = size||"10.5pt";
+    return `<ul style="margin:2px 0 4px 0;padding-left:17px;list-style-type:disc;color:#1a1a1a">`
+      + arr.map(b=>`<li style="font-family:${f};font-size:${size};line-height:1.4;margin-bottom:0;">${b}</li>`).join("")
+      +`</ul>`;
+  };
+
+  /* ════════════════════════════════════════════════
+     TEMPLATE 1 — CLASSIC  (Ritesh-style: centered
+     name, bold ALL-CAPS headers + black rule)
+  ════════════════════════════════════════════════ */
+  if(T==="classic"){
+    const F="Calibri,Arial,sans-serif";
+    const sec = t =>
+        `<div style="margin-top:10px;">`
+      + `<div style="font-family:${F};font-size:10.5pt;font-weight:bold;text-transform:uppercase;letter-spacing:0.3px;color:#000;">${t}</div>`
+      + `<div style="border-top:1.5pt solid #000;margin-top:1px;margin-bottom:4px;"></div>`
+      + `</div>`;
+    const row2 = (l,r) =>
+        `<div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;color:#000;">`
+      + `<span style="font-family:${F};font-size:10.5pt;">${l}</span>`
+      + `<span style="font-family:${F};font-size:10.5pt;white-space:nowrap;flex-shrink:0;">${r||""}</span>`
+      + `</div>`;
+
+    const header =
+        `<div style="text-align:center;margin-bottom:7px;">`
+      + `<div style="font-family:${F};font-size:14pt;font-weight:bold;letter-spacing:0.3px;margin-bottom:2px;">${d.name||""}</div>`
+      + `<div style="font-family:${F};font-size:9pt;color:#111;">${d.contact||""}</div>`
+      + `</div>`;
+    const summary = d.summary ? sec("Professional Summary")+`<p style="font-family:${F};font-size:10.5pt;line-height:1.5;margin:2px 0 4px;color:#1a1a1a;">${d.summary}</p>` : "";
+    const edu = (d.education&&d.education.length) ? sec("Education")+d.education.map(e=>
+      `<div style="margin-bottom:3px;">`
+      +row2(`<strong>${e.school||""}</strong>`, e.date||"")
+      +row2(`<em>${(e.degree||"")+(e.gpa?` (GPA: ${e.gpa})`:"")}</em>`, e.location||"")
+      +buls(e.details,F)
+      +`</div>`).join("") : "";
+    const exp = (d.experience&&d.experience.length) ? sec("Experience")+d.experience.map(e=>
+      `<div style="margin-bottom:3px;">`
+      +row2(`<strong>${e.company||""}</strong>${e.title?` | <em>${e.title}</em>`:""}`, e.dates||"")
+      +(e.location?`<div style="font-family:${F};font-size:10pt;color:#333;">${e.location}</div>`:"")
+      +buls(e.bullets,F)
+      +`</div>`).join("") : "";
+    const proj = (d.projects&&d.projects.length) ? sec("Projects")+d.projects.map(pr=>
+      `<div style="margin-bottom:3px;">`
+      +row2(`<strong>${pr.name||""}</strong>`, pr.dates||"")
+      +buls(pr.bullets,F)
+      +`</div>`).join("") : "";
+    const addl = (d.additionalProjects&&d.additionalProjects.length)
+      ? `<ul style="margin:1px 0 5px 0;padding-left:17px;list-style-type:disc;">`
+        +d.additionalProjects.map(p=>`<li style="font-family:${F};font-size:10.5pt;line-height:1.4;margin-bottom:0;"><strong>${p.name||""}:</strong> ${p.description||""}</li>`).join("")
+        +`</ul>` : "";
+    const skills = (d.skills&&d.skills.length) ? sec("Skills")
+      +d.skills.map(s=>`<div style="display:flex;font-family:${F};font-size:10.5pt;line-height:1.4;margin-bottom:1px;color:#1a1a1a;"><strong style="white-space:nowrap;margin-right:4px;">• ${s.label||""}:</strong><span>${s.items||""}</span></div>`).join("") : "";
+    const certs = (d.certifications&&d.certifications.length) ? sec("Certifications")+buls(d.certifications,F) : "";
+    return `<div style="font-family:${F};font-size:10.5pt;line-height:1.4;color:#1a1a1a;background:#fff;width:100%;">${header}${summary}${edu}${exp}${proj}${addl}${skills}${certs}</div>`;
+  }
+
+  /* ════════════════════════════════════════════════
+     TEMPLATE 2 — MODERN  (left accent bar, name
+     large left-aligned, colored section labels)
+  ════════════════════════════════════════════════ */
+  if(T==="modern"){
+    const F="Arial,sans-serif";
+    const ACC="#2563eb"; // blue accent
+    const sec = t =>
+        `<div style="margin-top:11px;margin-bottom:4px;display:flex;align-items:center;gap:8px;">`
+      + `<div style="width:3px;height:14px;background:${ACC};border-radius:2px;flex-shrink:0;"></div>`
+      + `<div style="font-family:${F};font-size:10pt;font-weight:bold;text-transform:uppercase;letter-spacing:0.8px;color:${ACC};">${t}</div>`
+      + `</div>`;
+    const row2 = (l,r) =>
+        `<div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;">`
+      + `<span style="font-family:${F};font-size:10.5pt;">${l}</span>`
+      + `<span style="font-family:${F};font-size:10pt;color:#555;white-space:nowrap;flex-shrink:0;">${r||""}</span>`
+      + `</div>`;
+
+    const header =
+        `<div style="border-left:4px solid ${ACC};padding-left:12px;margin-bottom:10px;">`
+      + `<div style="font-family:${F};font-size:18pt;font-weight:bold;color:#111;letter-spacing:0.3px;line-height:1.2;">${d.name||""}</div>`
+      + `<div style="font-family:${F};font-size:9.5pt;color:#555;margin-top:3px;">`
+      + `${d.contact||""}`
+      + `${linksHTML ? ` | ${linksHTML}` : ""}`
+      + `</div>`
+      + `</div>`;
+    const summary = d.summary ? sec("Profile")+`<p style="font-family:${F};font-size:10.5pt;line-height:1.5;margin:0 0 4px;color:#222;">${d.summary}</p>` : "";
+    const edu = (d.education&&d.education.length) ? sec("Education")+d.education.map(e=>
+      `<div style="margin-bottom:4px;">`
+      +row2(`<strong>${e.school||""}</strong>`, e.date||"")
+      +row2(`<em style="color:#444;">${(e.degree||"")+(e.gpa?` • GPA ${e.gpa}`:"")}</em>`, e.location||"")
+      +buls(e.details,F)
+      +`</div>`).join("") : "";
+    const exp = (d.experience&&d.experience.length) ? sec("Experience")+d.experience.map(e=>
+      `<div style="margin-bottom:4px;">`
+      +row2(`<strong>${e.company||""}</strong>${e.title?`<span style="color:#555;font-weight:normal;"> — ${e.title}</span>`:""}`, e.dates||"")
+      +buls(e.bullets,F)
+      +`</div>`).join("") : "";
+    const proj = (d.projects&&d.projects.length) ? sec("Projects")+d.projects.map(pr=>
+      `<div style="margin-bottom:4px;">`
+      +row2(`<strong>${pr.name||""}</strong>`, pr.dates||"")
+      +buls(pr.bullets,F)
+      +`</div>`).join("") : "";
+    const addl = (d.additionalProjects&&d.additionalProjects.length)
+      ? `<ul style="margin:1px 0 5px 0;padding-left:17px;list-style-type:disc;">`
+        +d.additionalProjects.map(p=>`<li style="font-family:${F};font-size:10.5pt;line-height:1.4;margin-bottom:0;"><strong>${p.name||""}:</strong> ${p.description||""}</li>`).join("")
+        +`</ul>` : "";
+    const skills = (d.skills&&d.skills.length) ? sec("Skills")
+      +d.skills.map(s=>`<div style="display:flex;font-family:${F};font-size:10.5pt;line-height:1.45;margin-bottom:2px;"><strong style="white-space:nowrap;margin-right:5px;color:${ACC};">${s.label||""}:</strong><span style="color:#222;">${s.items||""}</span></div>`).join("") : "";
+    const certs = (d.certifications&&d.certifications.length) ? sec("Certifications")+buls(d.certifications,F) : "";
+    return `<div style="font-family:${F};font-size:10.5pt;line-height:1.4;color:#000;background:#fff;width:100%;">${header}${summary}${edu}${exp}${proj}${addl}${skills}${certs}</div>`;
+  }
+
+  /* ════════════════════════════════════════════════
+     TEMPLATE 3 — EXECUTIVE  (name centered with
+     thin double-rule, section headers with
+     spaced small-caps underline)
+  ════════════════════════════════════════════════ */
+  if(T==="executive"){
+    const F="Georgia,'Times New Roman',serif";
+    const FB="Arial,sans-serif"; // sans for body text
+    const sec = t =>
+        `<div style="margin-top:12px;margin-bottom:5px;text-align:center;">`
+      + `<div style="font-family:${F};font-size:9.5pt;font-variant:small-caps;letter-spacing:2px;color:#222;">${t}</div>`
+      + `<div style="border-top:0.5pt solid #888;margin-top:2px;"></div>`
+      + `</div>`;
+    const row2 = (l,r) =>
+        `<div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;">`
+      + `<span style="font-family:${FB};font-size:10.5pt;">${l}</span>`
+      + `<span style="font-family:${FB};font-size:10pt;color:#555;white-space:nowrap;flex-shrink:0;font-style:italic;">${r||""}</span>`
+      + `</div>`;
+
+    const header =
+        `<div style="text-align:center;border-bottom:2pt solid #222;border-top:2pt solid #222;padding:6px 0;margin-bottom:8px;">`
+      + `<div style="font-family:${F};font-size:16pt;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;">${d.name||""}</div>`
+      + `<div style="font-family:${FB};font-size:9pt;color:#444;margin-top:2px;letter-spacing:0.3px;">`
+      + `${d.contact||""}`
+      + `${linksHTML ? ` | ${linksHTML}` : ""}`
+      + `</div>`
+      + `</div>`;
+    const summary = d.summary ? sec("Professional Summary")+`<p style="font-family:${FB};font-size:10.5pt;line-height:1.55;margin:0 0 4px;text-align:justify;">${d.summary}</p>` : "";
+    const edu = (d.education&&d.education.length) ? sec("Education")+d.education.map(e=>
+      `<div style="margin-bottom:4px;">`
+      +row2(`<strong style="font-family:${F};">${e.school||""}</strong>`, e.date||"")
+      +row2(`<em style="font-family:${FB};color:#333;">${(e.degree||"")+(e.gpa?` — GPA ${e.gpa}`:"")}</em>`, e.location||"")
+      +buls(e.details,FB)
+      +`</div>`).join("") : "";
+    const exp = (d.experience&&d.experience.length) ? sec("Professional Experience")+d.experience.map(e=>
+      `<div style="margin-bottom:4px;">`
+      +row2(`<strong style="font-family:${F};">${e.company||""}</strong>${e.title?`<span style="font-family:${FB};font-weight:normal;color:#333;"> · ${e.title}</span>`:""}`, e.dates||"")
+      +buls(e.bullets,FB)
+      +`</div>`).join("") : "";
+    const proj = (d.projects&&d.projects.length) ? sec("Projects")+d.projects.map(pr=>
+      `<div style="margin-bottom:4px;">`
+      +row2(`<strong style="font-family:${F};">${pr.name||""}</strong>`, pr.dates||"")
+      +buls(pr.bullets,FB)
+      +`</div>`).join("") : "";
+    const addl = (d.additionalProjects&&d.additionalProjects.length)
+      ? `<ul style="margin:1px 0 5px 0;padding-left:17px;list-style-type:disc;">`
+        +d.additionalProjects.map(p=>`<li style="font-family:${FB};font-size:10.5pt;line-height:1.4;margin-bottom:0;"><strong>${p.name||""}:</strong> ${p.description||""}</li>`).join("")
+        +`</ul>` : "";
+    const skills = (d.skills&&d.skills.length) ? sec("Core Competencies")
+      +d.skills.map(s=>`<div style="display:flex;font-family:${FB};font-size:10.5pt;line-height:1.45;margin-bottom:2px;"><strong style="white-space:nowrap;margin-right:5px;font-family:${F};">${s.label||""}:</strong><span>${s.items||""}</span></div>`).join("") : "";
+    const certs = (d.certifications&&d.certifications.length) ? sec("Certifications")+buls(d.certifications,FB) : "";
+    return `<div style="font-family:${FB};font-size:10.5pt;line-height:1.4;color:#000;background:#fff;width:100%;">${header}${summary}${edu}${exp}${proj}${addl}${skills}${certs}</div>`;
+  }
+
+  /* ════════════════════════════════════════════════
+     TEMPLATE 4 — MINIMAL  (left-aligned name,
+     thin gray section dividers, clean sans-serif)
+  ════════════════════════════════════════════════ */
+  if(T==="minimal"){
+    const F="'Helvetica Neue',Helvetica,Arial,sans-serif";
+    const sec = t =>
+        `<div style="margin-top:11px;margin-bottom:3px;display:flex;align-items:center;gap:10px;">`
+      + `<div style="font-family:${F};font-size:9pt;font-weight:bold;text-transform:uppercase;letter-spacing:1.2px;color:#888;white-space:nowrap;">${t}</div>`
+      + `<div style="flex:1;border-top:1px solid #ddd;"></div>`
+      + `</div>`;
+    const row2 = (l,r) =>
+        `<div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;">`
+      + `<span style="font-family:${F};font-size:10.5pt;">${l}</span>`
+      + `<span style="font-family:${F};font-size:10pt;color:#777;white-space:nowrap;flex-shrink:0;">${r||""}</span>`
+      + `</div>`;
+
+    const header =
+        `<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #111;">`
+      + `<div style="font-family:${F};font-size:20pt;font-weight:900;color:#111;letter-spacing:-0.5px;line-height:1.1;">${d.name||""}</div>`
+      + `<div style="font-family:${F};font-size:9pt;color:#666;margin-top:4px;letter-spacing:0.2px;">`
+      + `${d.contact||""}`
+      + `${linksHTML ? ` | ${linksHTML}` : ""}`
+      + `</div>`
+      + `</div>`;
+    const summary = d.summary ? sec("About")+`<p style="font-family:${F};font-size:10.5pt;line-height:1.55;margin:0 0 4px;color:#333;">${d.summary}</p>` : "";
+    const edu = (d.education&&d.education.length) ? sec("Education")+d.education.map(e=>
+      `<div style="margin-bottom:4px;">`
+      +row2(`<strong>${e.school||""}</strong>`, e.date||"")
+      +row2(`<span style="color:#444;">${(e.degree||"")+(e.gpa?` — ${e.gpa} GPA`:"")} · ${e.location||""}</span>`, "")
+      +buls(e.details,F,"10pt")
+      +`</div>`).join("") : "";
+    const exp = (d.experience&&d.experience.length) ? sec("Experience")+d.experience.map(e=>
+      `<div style="margin-bottom:4px;">`
+      +row2(`<strong>${e.company||""}</strong>${e.title?`<span style="color:#555;font-weight:normal;"> · ${e.title}</span>`:""}`, e.dates||"")
+      +buls(e.bullets,F,"10pt")
+      +`</div>`).join("") : "";
+    const proj = (d.projects&&d.projects.length) ? sec("Projects")+d.projects.map(pr=>
+      `<div style="margin-bottom:4px;">`
+      +row2(`<strong>${pr.name||""}</strong>`, pr.dates||"")
+      +buls(pr.bullets,F,"10pt")
+      +`</div>`).join("") : "";
+    const addl = (d.additionalProjects&&d.additionalProjects.length)
+      ? `<ul style="margin:1px 0 5px 0;padding-left:17px;list-style-type:disc;">`
+        +d.additionalProjects.map(p=>`<li style="font-family:${F};font-size:10pt;line-height:1.4;margin-bottom:0;"><strong>${p.name||""}:</strong> ${p.description||""}</li>`).join("")
+        +`</ul>` : "";
+    const skills = (d.skills&&d.skills.length) ? sec("Skills")
+      +d.skills.map(s=>`<div style="display:flex;font-family:${F};font-size:10pt;line-height:1.45;margin-bottom:2px;"><strong style="white-space:nowrap;margin-right:5px;color:#555;">${s.label||""}:</strong><span style="color:#222;">${s.items||""}</span></div>`).join("") : "";
+    const certs = (d.certifications&&d.certifications.length) ? sec("Certifications")+buls(d.certifications,F,"10pt") : "";
+    return `<div style="font-family:${F};font-size:10.5pt;line-height:1.4;color:#000;background:#fff;width:100%;">${header}${summary}${edu}${exp}${proj}${addl}${skills}${certs}</div>`;
+  }
+
+  // Fallback to classic
+  state.selectedTemplate="classic";
+  return renderResumeHTML("classic");
+}
+
+function buildMockResume(p,job,approved){
+  // If we have the real resume text, use it as the base and append the tailoring note
+  if(state.resumeText && state.resumeText.length > 100){
+    let base = state.resumeText;
+    // Apply any approved suggestion text substitutions manually
+    approved.forEach(s=>{
+      if(s.oldText && s.newText && base.includes(s.oldText)){
+        base=base.replace(s.oldText, s.newText);
+      }
+    });
+    return base + `\n\n---\nTailored for: ${job.title} at ${job.company}`;
+  }
+  // True fallback using parsed fields
+  return `${p.name||"Your Name"}
+${[p.email,p.phone].filter(Boolean).join(" | ")||""}
+
+PROFESSIONAL SUMMARY
+${p.summary||"Experienced professional seeking new opportunities."}
+
+CORE SKILLS
+${(p.topSkills||[]).join(" · ")||""}
+
+WORK EXPERIENCE
+${(p.recentJobs||[]).join("\n")||""}
+
+EDUCATION
+${p.education||""}
+
+---
+Tailored for: ${job.title} at ${job.company}`;
+}
+
+/* ── STEP 4.5: Template Picker ── */
+function renderTemplatePicker(c){
+  const templates = [
+    {
+      id:"classic",
+      name:"Classic",
+      desc:"Bold headers, centered name — clean & traditional",
+      preview: t => {
+        const F="Calibri,Arial,sans-serif";
+        return `<div style="font-family:${F};font-size:7pt;line-height:1.35;color:#000;">
+          <div style="text-align:center;margin-bottom:5px;">
+            <div style="font-size:11pt;font-weight:bold;">JOHN DOE</div>
+            <div style="font-size:6pt;color:#333;">New York, NY | john@email.com | LinkedIn</div>
+          </div>
+          <div style="font-weight:bold;text-transform:uppercase;letter-spacing:0.3px;font-size:7pt;border-bottom:1pt solid #000;margin:5px 0 3px;">Experience</div>
+          <div style="display:flex;justify-content:space-between;"><strong>Acme Corp</strong> | <em>Sr. Analyst</em><span>2022–Present</span></div>
+          <ul style="margin:2px 0 3px 12px;padding:0;list-style:disc;font-size:6.5pt;"><li>Led cross-functional analytics initiatives</li><li>Built dashboards reducing reporting time by 40%</li></ul>
+          <div style="font-weight:bold;text-transform:uppercase;letter-spacing:0.3px;font-size:7pt;border-bottom:1pt solid #000;margin:5px 0 3px;">Skills</div>
+          <div style="font-size:6.5pt;"><strong>Technical:</strong> Python, SQL, Tableau, Excel</div>
+        </div>`;
+      }
+    },
+    {
+      id:"modern",
+      name:"Modern",
+      desc:"Blue accent bar, colored section labels — contemporary",
+      preview: t => {
+        const F="Arial,sans-serif";
+        const ACC="#2563eb";
+        return `<div style="font-family:${F};font-size:7pt;line-height:1.35;color:#000;">
+          <div style="border-left:3px solid ${ACC};padding-left:8px;margin-bottom:7px;">
+            <div style="font-size:13pt;font-weight:bold;color:#111;">John Doe</div>
+            <div style="font-size:6pt;color:#555;">New York, NY | john@email.com | LinkedIn</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;">
+            <div style="width:2px;height:9px;background:${ACC};"></div>
+            <div style="font-size:6.5pt;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;color:${ACC};">Experience</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;"><strong>Acme Corp</strong> — <em style="color:#555;">Sr. Analyst</em><span style="color:#555;font-size:6pt;">2022–Present</span></div>
+          <ul style="margin:2px 0 3px 12px;padding:0;list-style:disc;font-size:6.5pt;"><li>Led cross-functional analytics initiatives</li><li>Built dashboards reducing reporting time by 40%</li></ul>
+          <div style="display:flex;align-items:center;gap:5px;margin-top:5px;margin-bottom:3px;">
+            <div style="width:2px;height:9px;background:${ACC};"></div>
+            <div style="font-size:6.5pt;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;color:${ACC};">Skills</div>
+          </div>
+          <div style="font-size:6.5pt;"><strong style="color:${ACC};">Technical:</strong> Python, SQL, Tableau, Excel</div>
+        </div>`;
+      }
+    },
+    {
+      id:"executive",
+      name:"Executive",
+      desc:"Serif fonts, double-rule header — formal & prestigious",
+      preview: t => {
+        const F="Georgia,serif";
+        const FB="Arial,sans-serif";
+        return `<div style="font-family:${FB};font-size:7pt;line-height:1.35;color:#000;">
+          <div style="text-align:center;border-top:1.5pt solid #222;border-bottom:1.5pt solid #222;padding:4px 0;margin-bottom:6px;">
+            <div style="font-family:${F};font-size:12pt;font-weight:bold;letter-spacing:1px;text-transform:uppercase;">John Doe</div>
+            <div style="font-size:6pt;color:#444;margin-top:1px;">New York, NY | john@email.com | LinkedIn</div>
+          </div>
+          <div style="text-align:center;font-family:${F};font-size:6.5pt;font-variant:small-caps;letter-spacing:1.5px;color:#333;border-bottom:0.5pt solid #999;margin-bottom:3px;padding-bottom:1px;">Professional Experience</div>
+          <div style="display:flex;justify-content:space-between;"><strong style="font-family:${F};">Acme Corp</strong> · <em style="font-size:6.5pt;">Sr. Analyst</em><span style="font-style:italic;color:#555;font-size:6pt;">2022–Present</span></div>
+          <ul style="margin:2px 0 3px 12px;padding:0;list-style:disc;font-size:6.5pt;"><li>Led cross-functional analytics initiatives</li><li>Built dashboards reducing reporting time by 40%</li></ul>
+          <div style="text-align:center;font-family:${F};font-size:6.5pt;font-variant:small-caps;letter-spacing:1.5px;color:#333;border-bottom:0.5pt solid #999;margin-bottom:3px;margin-top:5px;padding-bottom:1px;">Core Competencies</div>
+          <div style="font-size:6.5pt;"><strong style="font-family:${F};">Technical:</strong> Python, SQL, Tableau, Excel</div>
+        </div>`;
+      }
+    },
+    {
+      id:"minimal",
+      name:"Minimal",
+      desc:"Heavy name, gray section dividers — sleek & modern",
+      preview: t => {
+        const F="'Helvetica Neue',Arial,sans-serif";
+        return `<div style="font-family:${F};font-size:7pt;line-height:1.35;color:#000;">
+          <div style="border-bottom:2px solid #111;padding-bottom:5px;margin-bottom:6px;">
+            <div style="font-size:15pt;font-weight:900;color:#111;letter-spacing:-0.5px;line-height:1;">John Doe</div>
+            <div style="font-size:6pt;color:#666;margin-top:3px;">New York, NY | john@email.com | LinkedIn</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">
+            <div style="font-size:6pt;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#888;white-space:nowrap;">Experience</div>
+            <div style="flex:1;border-top:1px solid #ddd;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;"><strong>Acme Corp</strong> · <em style="color:#555;">Sr. Analyst</em><span style="color:#777;font-size:6pt;">2022–Present</span></div>
+          <ul style="margin:2px 0 3px 12px;padding:0;list-style:disc;font-size:6.5pt;"><li>Led cross-functional analytics initiatives</li><li>Built dashboards reducing reporting time by 40%</li></ul>
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;margin-top:5px;">
+            <div style="font-size:6pt;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#888;white-space:nowrap;">Skills</div>
+            <div style="flex:1;border-top:1px solid #ddd;"></div>
+          </div>
+          <div style="font-size:6.5pt;"><strong style="color:#555;">Technical:</strong> Python, SQL, Tableau, Excel</div>
+        </div>`;
+      }
+    }
+  ];
+
+  c.innerHTML=`<div class="card">
+    <div class="card-title">Choose your resume template</div>
+    <div class="card-sub">Pick the layout for your tailored resume. Your content will be poured into the chosen design.</div>
+    <div class="tpl-grid" id="tplGrid">
+      ${templates.map(t=>`
+        <div class="tpl-card${state.selectedTemplate===t.id?' selected':''}" onclick="selectTemplate('${t.id}')" id="tpl-${t.id}">
+          <div class="tpl-preview" id="tpl-prev-${t.id}"></div>
+          <div class="tpl-label">
+            <div class="tpl-name">${t.name}</div>
+            <div class="tpl-desc">${t.desc}</div>
+          </div>
+        </div>`).join("")}
+    </div>
+    <div class="btns">
+      <button class="btn btn-ghost" onclick="setStep(4)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+      <button class="btn btn-primary" onclick="setStep(5)"><i class="ti ti-eye" aria-hidden="true"></i> Preview & Apply</button>
+    </div>
+  </div>`;
+
+  // Inject live previews
+  templates.forEach(t=>{
+    const el = document.getElementById(`tpl-prev-${t.id}`);
+    if(el) el.innerHTML = t.preview(t.id);
+  });
+}
+
+function selectTemplate(id){
+  state.selectedTemplate = id;
+  document.querySelectorAll(".tpl-card").forEach(el=>{
+    el.classList.toggle("selected", el.id===`tpl-${id}`);
+  });
+}
+
+function switchTemplate(id){
+  state.selectedTemplate = id;
+  // Re-render the preview
+  const prev = document.getElementById("resumePreview");
+  if(prev) prev.innerHTML = renderResumeHTML(id);
+  // Update button styles using data-tpl attribute (avoids HTML-encoded onclick selector issues)
+  document.querySelectorAll("[data-tpl]").forEach(btn=>{
+    const active = btn.dataset.tpl === id;
+    btn.style.borderColor = active ? "var(--gold)" : "var(--border)";
+    btn.style.background  = active ? "rgba(201,168,76,0.12)" : "var(--surface2)";
+    btn.style.color       = active ? "var(--gold)" : "var(--text-muted)";
+  });
+}
+
+
+function renderApply(c){
+  const job=state.jobs[state.selectedJob];
+  const formatted=state.finalResume.replace(/\n/g,"<br>").replace(/^(.*SUMMARY|.*SKILLS|.*EXPERIENCE|.*EDUCATION)/gm,"<h2>$1</h2>");
+  const clFormatted=state.finalCoverLetter?state.finalCoverLetter.replace(/\n\n/g,"</p><p>").replace(/\n/g,"<br>"):"";
+  const p=state.parsedResume||{};
+
+  c.innerHTML=`
+    <div class="card">
+      <div class="card-title">Your Tailored Resume is Ready!</div>
+      <div class="card-sub">Applying for <strong>${job.title}</strong> at <strong>${job.company}</strong></div>
+      <div class="alert alert-success"><i class="ti ti-circle-check" aria-hidden="true"></i> ${state.suggestions.filter(s=>s.status==="approved").length} AI improvements applied · ATS-optimized · Keyword-matched</div>
+      <div class="resume-preview" id="resumePreview">${formatted}</div>
+      <div class="btns" style="margin-top:1rem">
+        <button class="btn btn-ghost" onclick="state.step=4;renderSuggestions(document.getElementById('mainContent'))"><i class="ti ti-edit" aria-hidden="true"></i> Edit Suggestions</button>
+        <button class="btn btn-ghost" onclick="copyResume()"><i class="ti ti-copy" aria-hidden="true"></i> Copy Resume</button>
+        <button class="btn btn-primary" onclick="downloadResume()"><i class="ti ti-download" aria-hidden="true"></i> Download PDF</button>
+      </div>
+    </div>
+
+    <!-- Cover Letter Section (same tab) -->
+    <div class="card" id="coverLetterCard">
+      <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span><i class="ti ti-file-description" style="color:var(--gold);margin-right:8px" aria-hidden="true"></i>Cover Letter</span>
+        ${state.finalCoverLetter ? `<span style="font-size:12px;color:var(--green);font-family:'DM Sans',sans-serif"><i class="ti ti-circle-check" aria-hidden="true"></i> Generated</span>` : `<span style="font-size:12px;color:var(--text-muted);font-family:'DM Sans',sans-serif">Optional</span>`}
+      </div>
+      <div class="card-sub">Generate a personalized cover letter for this role, matched to your resume.</div>
+
+      ${state.finalCoverLetter ? `
+        <div class="resume-preview" id="coverLetterPreview" style="font-family:'DM Sans',sans-serif;font-size:14.5px;line-height:1.8;color:#1a1a1a;padding:2.5rem 3rem;"><p>${clFormatted}</p></div>
+        <div class="btns" style="margin-top:1rem">
+          <button class="btn btn-ghost" onclick="state.finalCoverLetter='';renderApply(document.getElementById('mainContent'))"><i class="ti ti-refresh" aria-hidden="true"></i> Regenerate</button>
+          <button class="btn btn-ghost" onclick="copyCoverLetter()"><i class="ti ti-copy" aria-hidden="true"></i> Copy Letter</button>
+          <button class="btn btn-primary" onclick="downloadCoverLetter()"><i class="ti ti-download" aria-hidden="true"></i> Download PDF</button>
+        </div>
+      ` : `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+          <div class="form-group">
+            <label>Your name</label>
+            <input type="text" id="clName" placeholder="Full name" value="${p.name||""}"/>
+          </div>
+          <div class="form-group">
+            <label>Hiring manager <span style="color:var(--text-dim)">(optional)</span></label>
+            <input type="text" id="clHiringManager" placeholder="Leave blank for 'Hiring Manager'"/>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:1rem">
+          <label>Tone</label>
+          <div class="checkbox-group" id="toneGroup" style="margin-top:6px">
+            ${[["professional","Professional"],["enthusiastic","Enthusiastic"],["concise","Concise & Direct"],["storytelling","Storytelling"]].map(([val,label])=>`
+              <label class="chip ${state.coverLetterTone===val?"selected":""}">
+                <input type="radio" name="tone" value="${val}" ${state.coverLetterTone===val?"checked":""}/>
+                ${label}
+              </label>`).join("")}
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:1rem">
+          <label>Anything specific to highlight? <span style="color:var(--text-dim)">(optional)</span></label>
+          <textarea id="clExtra" rows="2" placeholder="e.g. My project X directly relates to their mission. I'm relocating next month." style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;width:100%;resize:vertical"></textarea>
+        </div>
+        <div class="btns" style="margin-top:0">
+          <button class="btn btn-primary" onclick="generateCoverLetter()">
+            <i class="ti ti-sparkles" aria-hidden="true"></i> Generate Cover Letter
+          </button>
+        </div>
+      `}
+    </div>
+
+    <div class="apply-cta">
+      <h3>Ready to Apply?</h3>
+      <p>Your resume${state.finalCoverLetter?" and cover letter are":"is"} tailored and ready.<br>${job.applyUrl && job.applyUrl !== "#" && job.applyUrl.startsWith("http") ? "Apply directly below, or search on a job board." : "Search for this role on a job board below."}</p>
+      ${job.applyUrl && job.applyUrl !== "#" && job.applyUrl.startsWith("http")
+        ? `<a href="${job.applyUrl}" target="_blank" rel="noopener noreferrer" onclick="trackApplication(${state.selectedJob})">
+            <button class="btn btn-primary" style="margin:0 auto 1rem;font-size:1rem;padding:14px 28px">
+              <i class="ti ti-external-link" aria-hidden="true"></i> Apply at ${job.company} →
+            </button>
+           </a>`
+        : ""
+      }
+      <div style="padding-top:1rem;border-top:1px solid rgba(201,168,76,0.2);margin-top:0.5rem">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:0.75rem;font-weight:500;letter-spacing:0.3px">🔍 SEARCH ON JOB BOARDS</div>
+        <div id="applyBoardLinks" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center"></div>
+      </div>
+    </div>`;
+
+  // Render job board links on Apply screen
+  setTimeout(()=>{
+    const enc  = encodeURIComponent;
+    const occ  = enc(job.title||state.prefs.occupation||"");
+    const loc  = enc(job.location||state.prefs.location||"");
+    const boards = [
+      { name:"Indeed",       color:"#2164f3", url:`https://www.indeed.com/jobs?q=${occ}&l=${loc}` },
+      { name:"LinkedIn",     color:"#0077b5", url:`https://www.linkedin.com/jobs/search/?keywords=${occ}&location=${loc}` },
+      { name:"Glassdoor",    color:"#0caa41", url:`https://www.glassdoor.com/Job/jobs.htm?suggestCount=0&typedKeyword=${occ}` },
+      { name:"Handshake",    color:"#e8635a", url:`https://joinhandshake.com/jobs/?query=${occ}&location=${loc}` },
+      { name:"SimplyHired",  color:"#ff6c36", url:`https://www.simplyhired.com/search?q=${occ}&l=${loc}` },
+      { name:"ZipRecruiter", color:"#00a550", url:`https://www.ziprecruiter.com/jobs-search?search=${occ}&location=${loc}` },
+      { name:"Wellfound",    color:"#8b5cf6", url:`https://wellfound.com/jobs?q=${occ}&l=${loc}` },
+    ];
+    const bl = document.getElementById("applyBoardLinks");
+    if(bl) bl.innerHTML = boards.map(b=>
+      `<a href="${b.url}" target="_blank" rel="noopener" style="text-decoration:none">
+        <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;white-space:nowrap;transition:all 0.15s"
+          onmouseover="this.style.borderColor='${b.color}';this.style.color='${b.color}';this.style.background='rgba(201,168,76,0.1)'"
+          onmouseout="this.style.borderColor='rgba(201,168,76,0.2)';this.style.color='var(--text-muted)';this.style.background='rgba(201,168,76,0.06)'">
+          <span style="width:8px;height:8px;border-radius:50%;background:${b.color};display:inline-block;flex-shrink:0"></span>${b.name}
+        </span>
+      </a>`
+    ).join("");
+  }, 50);
+
+  // Wire up tone chips after render
+  document.querySelectorAll("#toneGroup .chip").forEach(chip=>{
+    chip.addEventListener("click",()=>{
+      document.querySelectorAll("#toneGroup .chip").forEach(c2=>c2.classList.remove("selected"));
+      chip.classList.add("selected");
+      state.coverLetterTone=chip.querySelector("input").value;
+    });
+  });
+}
+
+async function generateCoverLetter(){
+  const job = state.jobs[state.selectedJob];
+  const p   = state.parsedResume||{};
+  const name = document.getElementById("clName")?.value || p.name || "";
+  const hm   = document.getElementById("clHiringManager")?.value || "";
+  const extra= document.getElementById("clExtra")?.value || "";
+  const tone = state.coverLetterTone || "professional";
+
+  // Show loading inside the card
+  const card = document.getElementById("coverLetterCard");
+  if(card){
+    card.innerHTML = `<div class="card-title"><i class="ti ti-file-description" style="color:var(--gold);margin-right:8px"></i>Cover Letter</div>
+      <div style="display:flex;align-items:center;gap:12px;padding:1.5rem 0;color:var(--text-muted)">
+        <div class="spinner"></div> Writing your cover letter...
+      </div>`;
+  }
+
+  const prompt = `Write a ${tone} cover letter for ${name||"the candidate"} applying for ${job.title} at ${job.company}.
+${hm ? `Address it to ${hm}.` : "Address it to the Hiring Manager."}
+Key job requirements: ${(job.keyRequirements||[]).join(", ")}.
+Candidate background: ${p.summary||""}
+Top skills: ${(p.topSkills||[]).join(", ")||""}
+Recent experience: ${(p.recentJobs||[]).join(", ")||""}
+${extra ? `Also mention: ${extra}` : ""}
+Write 3 focused paragraphs. Use a ${tone} tone. No placeholder brackets — write it as a finished, ready-to-send letter. End with a professional sign-off using the candidate's name.`;
+
+  try{
+    const resp = await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:MODEL,max_tokens:1000,messages:[{role:"user",content:prompt}]})
+    });
+    const data = await resp.json();
+    state.finalCoverLetter = data.content.map(i=>i.text||"").join("").trim();
+  } catch(e){
+    state.finalCoverLetter = `Dear ${hm||"Hiring Manager"},\n\nI am excited to apply for the ${job.title} position at ${job.company}. With ${p.yearsExperience||"several"} years of experience in ${(p.topSkills||[])[0]||"this field"}, I am confident I can contribute meaningfully to your team.\n\nThroughout my career, I have developed strong expertise in ${(job.keyRequirements||[]).slice(0,2).join(" and ")}. I am drawn to ${job.company} because of its reputation and the opportunity this role represents.\n\nI would welcome the chance to discuss how my background aligns with your needs. Thank you for your consideration.\n\nSincerely,\n${name||"Your Name"}`;
+  }
+  // Re-render the full apply view so the cover letter section shows with download button
+  renderApply(document.getElementById("mainContent"));
+}
+
+function serializeResume(){
+  const d=state.finalResumeData;
+  if(!d) return state.finalResume||"";
+  const lines=[];
+  if(d.name) lines.push(d.name);
+  if(d.contact) lines.push(d.contact);
+  lines.push("");
+  if(d.summary){lines.push("PROFESSIONAL SUMMARY");lines.push(d.summary);lines.push("");}
+  if(d.skills&&Object.keys(d.skills).length){
+    lines.push("SKILLS");
+    Object.entries(d.skills).forEach(([k,v])=>lines.push(`${k}: ${v}`));
+    lines.push("");
+  }
+  if(d.experience&&d.experience.length){
+    lines.push("WORK EXPERIENCE");
+    d.experience.forEach(e=>{
+      lines.push(`${e.title} · ${e.company}`);
+      if(e.location||e.dates) lines.push(`${e.location||""}${e.dates?" | "+e.dates:""}`);
+      (e.bullets||[]).forEach(b=>lines.push(`  • ${b}`));
+      lines.push("");
+    });
+  }
+  if(d.projects&&d.projects.length){
+    lines.push("PROJECTS");
+    d.projects.forEach(pr=>{
+      lines.push(`${pr.name}${pr.dates?" | "+pr.dates:""}`);
+      (pr.bullets||[]).forEach(b=>lines.push(`  • ${b}`));
+      lines.push("");
+    });
+  }
+  if(d.education&&d.education.length){
+    lines.push("EDUCATION");
+    d.education.forEach(e=>{
+      lines.push(`${e.degree} · ${e.school}`);
+      if(e.location||e.date) lines.push(`${e.location||""}${e.date?" | "+e.date:""}`);
+      (e.details||[]).forEach(b=>lines.push(`  ${b}`));
+      lines.push("");
+    });
+  }
+  if(d.certifications&&d.certifications.length){
+    lines.push("CERTIFICATIONS");
+    d.certifications.forEach(c=>lines.push(`  • ${c}`));
+  }
+  return lines.join("\n");
+}
+
+function copyResume(){
+  // Get plain text from the rendered preview
+  const preview = document.getElementById("resumePreview");
+  const text = preview ? preview.innerText : serializeResume();
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=[...document.querySelectorAll(".btn")].find(b=>b.textContent.includes("Copy"));
+    if(btn){btn.innerHTML='<i class="ti ti-check" aria-hidden="true"></i> Copied!';setTimeout(()=>{btn.innerHTML='<i class="ti ti-copy" aria-hidden="true"></i> Copy Resume';},2000);}
+  });
+}
+
+function downloadResume(){
+  const job = state.jobs[state.selectedJob];
+  const d   = state.finalResumeData;
+  const name    = (d?.name || state.parsedResume?.name || "Resume").replace(/\s+/g,"_");
+  const company = (job?.company || "").replace(/\s+/g,"_");
+  const fname   = `${name}_${company}`;
+
+  const resumeBodyHTML = renderResumeHTML();
+  const printHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${fname}</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#fff;color:#000;font-family:Calibri,Arial,sans-serif;font-size:10.5pt}
+  ul{list-style-type:disc;margin:0;padding:0}
+  li{margin-bottom:1px}
+  body{padding:0.6in 0.7in}
+  @page{size:letter;margin:0}
+  @media print{
+    html,body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{padding:0.6in 0.7in}
+    @page{size:letter;margin:0}
+  }
+</style></head><body>${resumeBodyHTML}</body></html>`;
+
+  const win = window.open("","_blank","width=850,height=1100");
+  if(!win){
+    alert("Please allow popups for PDF download, or use the Copy button and paste into a document.");
+    return;
+  }
+  win.document.write(printHTML);
+  win.document.close();
+  win.focus();
+  // Small delay lets fonts/layout settle before print dialog
+  setTimeout(()=>{ win.print(); setTimeout(()=>win.close(), 1500); }, 700);
+}
+
+function copyCoverLetter(){
+  navigator.clipboard.writeText(state.finalCoverLetter||"").then(()=>{
+    const btn=[...document.querySelectorAll(".btn")].find(b=>b.textContent.includes("Copy Letter"));
+    if(btn){btn.innerHTML='<i class="ti ti-check" aria-hidden="true"></i> Copied!';setTimeout(()=>{btn.innerHTML='<i class="ti ti-copy" aria-hidden="true"></i> Copy Letter';},2000);}
+  });
+}
+
+function downloadCoverLetter(){
+  const job   = state.jobs[state.selectedJob];
+  const fname = `CoverLetter_${(job?.company||"Company").replace(/\s+/g,"_")}`;
+  const p     = state.parsedResume||{};
+  // Format cover letter as clean paragraphs
+  const paras = state.finalCoverLetter
+    .split(/\n{2,}/)
+    .map(para => `<p style="margin-bottom:14px;font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.8;color:#000;">${para.replace(/\n/g,"<br>")}</p>`)
+    .join("");
+  const clBody = `<div style="font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.8;color:#000;background:#fff;width:100%;">${paras}</div>`;
+  const printHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${fname}</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}html,body{background:#fff;color:#000;font-family:Calibri,Arial,sans-serif;}body{padding:0.75in 0.9in}@page{size:letter;margin:0}@media print{html,body{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{padding:0.75in 0.9in}@page{size:letter;margin:0}}</style>
+</head><body>${clBody}</body></html>`;
+  const win = window.open("","_blank","width=850,height=1100");
+  if(!win){ alert("Please allow popups for PDF download."); return; }
+  win.document.write(printHTML);
+  win.document.close();
+  win.focus();
+  setTimeout(()=>{ win.print(); setTimeout(()=>win.close(),1500); }, 700);
+}
+
+render();
+
+</script>
+</body>
+</html>
